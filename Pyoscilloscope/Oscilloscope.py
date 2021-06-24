@@ -53,6 +53,7 @@ class Interface:
 
         self._time_range = None
         self._time_delay = None
+        self._time_division = None
 
         self._trigger_sweep = None
 
@@ -86,6 +87,23 @@ class Interface:
             print("Warning: current scope time range setting is", scope_time_delay, "rather than", self._time_delay, " Setting to actual value", scope_time_delay)
             self._time_delay = scope_time_delay
         return self._time_delay
+
+    @property
+    def time_division(self):
+        request = self.__command_list["time_division"] + self.__command_list["request_expression"]
+        scope_value = self.__instr.ask(request)
+        scope_time_division = float(re.search(r"\d[.]\d+E[+-]\d+", scope_value).group(0))
+        if scope_time_division != self._time_division:
+            print("Warning: current scope time range setting is", scope_time_division, "rather than", self._time_division, " Setting to actual value", scope_time_division)
+            self._time_division = scope_time_division
+        return self._time_division
+
+    @time_division.setter
+    def time_division(self, value):
+        self._time_division = value
+        if self._time_division:
+            request = self.__command_list["time_division"] + " " + str(value)
+            self.__instr.write(request)    
     
     @time_delay.setter
     def time_delay(self, value):
