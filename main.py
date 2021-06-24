@@ -7,12 +7,13 @@ def main():
     scope = Interface(ip, command_file)
     scope.clear()
     scope.reset()
-    scope.identify()
     scope.voltage_range[1] = 2
     scope.voltage_offset[1] = 12
     scope.time_range = 500e-6
     scope.time_division = 100e-6
-    #scope.voltage_offset[1] = .5
-    #scope.display_measurement(2, "vmax")
+    scope.attenuation[1] = 1
+    scope.attenuation[2] = 1
+    scope.time_delay = 50e-6
+    scope.trigger_sweep = "auto"
 if __name__ == "__main__":
     main()

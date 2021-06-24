@@ -13,12 +13,11 @@
     "time_range": "TIM:RANG",
     "time_division": "TIM:SCAL",
     "time_delay": "TIM:DEL",
-    "trigger_sweep": "TRIG",
+    "trigger_sweep": "TRIG:SWE",
+
     "trigger_sweep_type": {
         "normal": "NORM",
-        "auto": "AUTO",
-        "single": "SINGLE",
-        "stop": "STOP"
+        "auto": "AUTO"
     },
 
     "trigger_select": "TRSE",

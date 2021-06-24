@@ -39,6 +39,8 @@ class Interface:
         
         self.__measurement_commands = self.__command_list["measurement"]
 
+        self.__trigger_sweep_commands = self.__command_list["trigger_sweep_type"]
+
         self.display = Display(self.__instr, self.__command_list["channel_expression"], self.__command_list["display"], self.__command_list["request_expression"])
 
         self.attenuation = Attenuation(self.__instr, self.__command_list["channel_expression"], self.__command_list["attenuation"], self.__command_list["request_expression"])
@@ -56,6 +58,7 @@ class Interface:
         self._time_division = None
 
         self._trigger_sweep = None
+        self._trigger_type = None
 
         self._acquisition_mode = None
                              
@@ -118,14 +121,12 @@ class Interface:
         scope_value = self.__instr.ask(request)
         return self._trigger_sweep
 
+
     @trigger_sweep.setter
     def trigger_sweep(self, value):
-        if type(value) == TriggerSweep:
-            self._trigger_sweep = value.name
-        else:
-            self._trigger_sweep = TriggerSweep(0)
+        self._trigger_sweep = value
         if self._trigger_sweep != None:
-            request = self.__command_list["trigger_sweep"] + " " + str(self._trigger_sweep)
+            request = self.__command_list["trigger_sweep"] + " " + self.__trigger_sweep_commands[value]
             self.__instr.write(request)
 
 
