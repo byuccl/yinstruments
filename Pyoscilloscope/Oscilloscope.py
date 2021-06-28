@@ -128,7 +128,11 @@ class Interface:
         if self._trigger_sweep != None:
             request = self.__command_list["trigger_sweep"] + " " + self.__trigger_sweep_commands[value]
             self.__instr.write(request)
+    
 
+    @property
+    def trigger_type(self):
+        request = self.__command_list["trigger_type"]
 
     @property
     def acquisition_mode(self):
@@ -150,10 +154,10 @@ class Interface:
         self.__instr.write(self.__command_list["reset"])
 
     def auto_setup(self):
-        self.__instr(self.__command_list["auto_setup"])
+        self.__instr.write(self.__command_list["auto_setup"])
 
     def force_trigger(self):
-        self.__instr(self.__command_list["force_trigger"])
+        self.__instr.write(self.__command_list["force_trigger"])
 
     def set_trigger(self, source, trigger_type):
         command_format = self.__command_list["trigger_select"] + " " + trigger_type.name + ", " + "SR, " + self.__command_list["channel_expression"] + str(source)
