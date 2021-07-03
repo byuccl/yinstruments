@@ -1,9 +1,10 @@
+from posixpath import dirname
 import vxi11
+import os
 import re
 import json
 from enum import Enum
 from Pyoscilloscope.elements.channel_element import *
-
 
 class TriggerSweep(Enum):
     NORM = 0
@@ -29,12 +30,16 @@ class Interface:
         self._ip_address = ip_address
         
         self.__instr = vxi11.Instrument(self._ip_address)
-
+        commands_path = "/home/nathanmain20/PyInstruments/Pyoscilloscope/oscilloscope_commands/"
+        scope_directory = os.path.dirname(__file__)
+        commands_directory = os.path.join(scope_directory, "oscilloscope_commands")
         if commands_file == None:
-            with open("oscilloscope_commands_default.json") as f:
+            commands_path = os.path.join(commands_directory, "default.json")
+            with open(commands_path) as f:
                 self.__command_list = json.load(f)
         else:
-            with open(commands_file) as f:
+            commands_path = os.path.join(commands_directory, commands_file)
+            with open(commands_path) as f:
                 self.__command_list = json.load(f)
         
         self.__measurement_commands = self.__command_list["measurement"]

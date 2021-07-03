@@ -1,37 +1,27 @@
 {
     "request_expression":"?",
-    "channel_expression": "CHAN",
-    "attenuation": ":PROB",
-    "auto_setup": "AUTO",
+    "channel_expression": "C",
+    "attenuation": ":ATTN",
+    "auto_setup": "ASET",
     "identify":"*IDN?",
     "clear":"*CLS",
     "reset":"*RST",
-    "display": ":DISP",
-    "voltage_range": ":RANG",
-    "voltage_division": ":SCAL",
-    "voltage_offset": ":OFFS",
-    "time_range": "TIM:RANG",
-    "time_division": "TIM:SCAL",
-    "time_delay": "TIM:DEL",
-    "trigger_sweep": "TRIG",
+    "display": ":TRA",
+    "voltage_range": ":VDIV",
+    "voltage_division": ":VDIV",
+    "voltage_offset": ":OFST",
+    "time_range": "NA",
+    "time_division": "TDIV",
+    "time_delay": "TRDL",
+    "trigger_sweep": "TRMD",
+    "trigger_select": "TRSE",
+    "force_trigger": "TRMD SING;ARM;FRTR",
     "trigger_sweep_type": {
         "normal": "NORM",
-        "auto": "AUTO",
-        "single": "SINGLE",
-        "stop": "STOP"
+        "auto": "AUTO"
     },
-
-    "trigger_select": "TRSE",
-    "trigger_select_type": {
-        "edge": "EDGE",
-        "pulse": "GLIT",
-        "slope": "SLEW",
-        "video": "TV"
-    },
-    
-    "force_trigger": "TRMD SING;ARM;FRTR",
-    "wave_preamble": ":WAV:PRE?",
-    "wave_data": ":WAV?",
+    "wave_preamble": ":WF? DESC",
+    "wave_data": ":WF? DAT2",
     "measure_display": "PACU",
     "measure_obtain": ":PAVA",
     "measurement": {
