@@ -5,5 +5,9 @@ def main():
     command_file = "Siglent_SDS_1052DL+.json"
     scope = Interface(ip, command_file)
     scope.identify()
+    scope.reset()
+    scope.trigger_sweep = "auto"
+    scope.trigger_mode["EX"] = "edge"
+
 if __name__ == "__main__":
     main()

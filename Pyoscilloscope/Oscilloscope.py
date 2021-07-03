@@ -46,6 +46,8 @@ class Interface:
 
         self.__trigger_sweep_commands = self.__command_list["trigger_sweep_type"]
 
+        self.__trigger_mode_commands = self.__command_list["trigger_mode_type"]
+
         self.display = Display(self.__instr, self.__command_list["channel_expression"], self.__command_list["display"], self.__command_list["request_expression"])
 
         self.attenuation = Attenuation(self.__instr, self.__command_list["channel_expression"], self.__command_list["attenuation"], self.__command_list["request_expression"])
@@ -58,13 +60,13 @@ class Interface:
 
         self.measure = Measure_Element(self.__instr, self.__command_list["channel_expression"], self.__command_list["voltage_offset"], self.__command_list["request_expression"])
 
+        self.trigger_mode = Trigger_Type(self.__instr, self.__trigger_mode_commands, self.__command_list["channel_expression"], self.__command_list["trigger_mode"], self.__command_list["request_expression"])
+
         self._time_range = None
         self._time_delay = None
         self._time_division = None
 
         self._trigger_sweep = None
-        self._trigger_type = None
-
         self._acquisition_mode = None
                              
 
@@ -165,7 +167,7 @@ class Interface:
         self.__instr.write(self.__command_list["force_trigger"])
 
     def set_trigger(self, source, trigger_type):
-        command_format = self.__command_list["trigger_select"] + " " + trigger_type.name + ", " + "SR, " + self.__command_list["channel_expression"] + str(source)
+        command_format = self.__command_list["trigger_mode"] + " " + self.__trigger_mode_commands[trigger_type] + ", " + "SR, " + self.__command_list["channel_expression"] + str(source)
         print(command_format)
         self.__instr.write(command_format)
 
@@ -176,11 +178,12 @@ class Interface:
         command_format = self.__command_list["measure_display"] + " " + self.__measurement_commands[measurement_type] + ", " + self.__command_list["channel_expression"] + str(channel)
         self.__instr.write(command_format)
 
+    # This function allows the user to send commands directly to the oscilloscope in case a command is not implemented in this class
     def write(self, expression):
         self.__instr.write(expression)
 
+
     def ask(self, expression):
-        self.__instr.write(expression)
-        return self.__instr.read()    
+        return self.__instr.ask(expression)    
 
         

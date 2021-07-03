@@ -14,12 +14,18 @@
     "time_division": "TDIV",
     "time_delay": "TRDL",
     "trigger_sweep": "TRMD",
-    "trigger_select": "TRSE",
-    "force_trigger": "TRMD SING;ARM;FRTR",
     "trigger_sweep_type": {
         "normal": "NORM",
         "auto": "AUTO"
     },
+    "trigger_mode": "TRSE",
+    "trigger_mode_type": {
+        "one_command_mode": "True",
+        "source": "SR",
+        "edge": "EDGE",
+        "pulse": "GLIT"
+    },
+    "force_trigger": "TRMD SING;ARM;FRTR",
     "wave_preamble": ":WF? DESC",
     "wave_data": ":WF? DAT2",
     "measure_display": "PACU",

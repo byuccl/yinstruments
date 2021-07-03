@@ -93,3 +93,36 @@ class Measure_Element(Channel_Element):
 
     def __setitem__(self, key, value):
         print("Error: Cannot set measured value.")
+
+class Trigger_Type:
+    def __init__(self, instr, trigger_command, channel_format, command, command_query):
+        self.__instr = instr
+        self.trigger_command = trigger_command 
+        self.channel_format = channel_format
+        self.command = command
+        self.command_query = command_query
+        self.channel = {
+            1: None,
+            2: None,
+            3: None,
+            4: None,
+            "EX": None
+        }
+    def __getitem__(self, key):
+        return self.channel[key]
+
+    def __setitem__(self, key, value):
+        self.channel = self.channel.fromkeys(self.channel, None)
+        self.channel[key] = value
+        if self.channel[key]:
+            if type(key) == int:
+                if self.trigger_command["one_command_mode"]:
+                    command_format = self.command + " " + self.trigger_command[value] + ", " + self.trigger_command["source"] + ", " + self.channel_format + str(key)
+                else:
+                    command_format = self.channel_format + str(key) + self.command + " " + str(self.channel[key])
+            else:
+                if self.trigger_command["one_command_mode"]:
+                    command_format = self.command + " " + self.trigger_command[value] + ", " + self.trigger_command["source"] + ", " + key
+                else:
+                    command_format = self.channel_format + str(key) + self.command + " " + str(self.channel[key])
+            self.__instr.write(command_format)    
