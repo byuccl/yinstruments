@@ -6,24 +6,6 @@ import json
 from enum import Enum
 from Pyoscilloscope.elements.channel_element import *
 
-class TriggerSweep(Enum):
-    NORM = 0
-    AUTO = 1
-    SINGLE = 2
-    STOP = 3
-
-class TriggerMode(Enum):
-    EDGE = 0
-    GLIT = 1
-    SLEW = 2
-    TV = 3
-                           
-class AcquisitionMode(Enum):
-    SAMPLING = 0
-    PDE = 1
-    AVERAGE = 2
-    HIGH_RES = 3
-
 
 class Interface:
     def __init__(self, ip_address, commands_file=None):
@@ -48,6 +30,8 @@ class Interface:
 
         self.__trigger_mode_commands = self.__command_list["trigger_mode_type"]
 
+        self.__aquisition_mode_commands = self.__command_list["acquire_mode_type"]
+
         self.display = Display(self.__instr, self.__command_list["channel_expression"], self.__command_list["display"], self.__command_list["request_expression"])
 
         self.attenuation = Attenuation(self.__instr, self.__command_list["channel_expression"], self.__command_list["attenuation"], self.__command_list["request_expression"])
@@ -68,6 +52,8 @@ class Interface:
 
         self._trigger_sweep = None
         self._acquisition_mode = None
+        self._acquisition_complete = None
+        
                              
 
     @property
@@ -135,11 +121,7 @@ class Interface:
         if self._trigger_sweep != None:
             request = self.__command_list["trigger_sweep"] + " " + self.__trigger_sweep_commands[value]
             self.__instr.write(request)
-    
 
-    @property
-    def trigger_type(self):
-        request = self.__command_list["trigger_type"]
 
     @property
     def acquisition_mode(self):
@@ -147,12 +129,25 @@ class Interface:
 
     @acquisition_mode.setter
     def acquisition_mode(self, value):
-        i = 0                            
+        self._acquisition_mode = value
+        if self.acquisition_mode != None:
+            request = self.__command_list["acquire_mode"] + " " + self.__aquisition_mode_commands[value]
+            self.__instr.write(request)
 
+    @property
+    def acquisition_complete(self):
+        i = 0
+
+    @acquisition_complete.setter
+    def acquisition_complete(self, value):
+        self._acquisition_complete = value
+        if self.acquisition_complete != None:
+            request = self.__command_list["acquire_complete"] + " " + str(value)
+            self.__instr.write(request)                                    
 
 
     def identify(self):
-        print(self.__instr.ask(self.__command_list["identify"]))
+        return self.__instr.ask(self.__command_list["identify"])
 
     def clear(self):
         self.__instr.write(self.__command_list["clear"])
@@ -160,19 +155,13 @@ class Interface:
     def reset(self):
         self.__instr.write(self.__command_list["reset"])
 
+    #This function will run the auto setup
     def auto_setup(self):
+        
         self.__instr.write(self.__command_list["auto_setup"])
 
     def force_trigger(self):
         self.__instr.write(self.__command_list["force_trigger"])
-
-    def set_trigger(self, source, trigger_type):
-        command_format = self.__command_list["trigger_mode"] + " " + self.__trigger_mode_commands[trigger_type] + ", " + "SR, " + self.__command_list["channel_expression"] + str(source)
-        print(command_format)
-        self.__instr.write(command_format)
-
-    def get_measurement(self, channel, measurement_type):
-        return self.__instr.ask("C1:PAVA? DUTY")
 
     def display_measurement(self, channel, measurement_type):
         command_format = self.__command_list["measure_display"] + " " + self.__measurement_commands[measurement_type] + ", " + self.__command_list["channel_expression"] + str(channel)
@@ -182,7 +171,7 @@ class Interface:
     def write(self, expression):
         self.__instr.write(expression)
 
-
+    # This function allows 
     def ask(self, expression):
         return self.__instr.ask(expression)    
 

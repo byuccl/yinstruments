@@ -26,6 +26,14 @@
         "pulse": "GLIT"
     },
     "force_trigger": "TRMD SING;ARM;FRTR",
+    "acquire_complete": "ACQ:COMP",
+    "acquire_mode": "ACQ:TYPE",
+    "acquire_mode_type": {
+        "normal": "NORM",
+        "average": "AVER",
+        "high_resolution": "HRE",
+        "peak_detect": "PEAK"
+    },
     "wave_preamble": ":WF? DESC",
     "wave_data": ":WF? DAT2",
     "measure_display": "PACU",
