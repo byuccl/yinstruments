@@ -30,8 +30,8 @@
     },
     
     "force_trigger": "TRMD SING;ARM;FRTR",
-    "wave_preamble": ":WAV:PRE?",
-    "wave_data": ":WAV?",
+    "wave_preamble": ":WAV:PRE",
+    "wave_data": ":WAV",
     "measure_display": "PACU",
     "measure_obtain": ":PAVA",
     "measurement": {
