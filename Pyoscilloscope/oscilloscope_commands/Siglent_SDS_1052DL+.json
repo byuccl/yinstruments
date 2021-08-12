@@ -34,8 +34,10 @@
         "high_resolution": "HRE",
         "peak_detect": "PEAK"
     },
-    "wave_preamble": ":WF? DESC",
-    "wave_data": ":WF? DAT2",
+    "wave_one_command": "True",
+    "wave_preamble": "NA",
+    "wave_data": ":WF",
+    "wave_header:": "ALL",
     "measure_display": "PACU",
     "measure_obtain": ":PAVA",
     "measurement": {
