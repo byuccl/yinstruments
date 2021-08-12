@@ -14,12 +14,11 @@ class Interface:
         self._ip_address = ip_address
         self.verbose = verbose
 
-        # Try to connect to the scope, if a timeout or other error occurs then print an error message and return.
+        # Try to connect to the scope, if a timeout or other error occurs then print an error message.
         try:
             self.__instr = vxi11.Instrument(self._ip_address)
         except:
             print("Error: A timeout has occurred trying to connect to the scope. Please try reconnecting.")
-            return
         
         # Setup the directory where the oscilloscope commands are stored by obtaining the directory of the Oscilloscope.py file (this file) and joining the name of the oscilloscope commands directory.
         commands_directory_name = "oscilloscope_commands"
@@ -449,7 +448,16 @@ class Interface:
         try:
             return self.__instr.ask(expression)
         except:
-            print("Error: A failure has occurred asking", expression, "to the scope at ask(). Possible scope timeout")    
+            print("Error: A failure has occurred asking", expression, "to the scope at ask(). Possible scope timeout")
+
+    # This function allows the user to reconnect to the scope if necessary
+    def connect(self):
+        # Try to connect to the scope, if a timeout or other error occurs then print an error message and return.
+        try:
+            self.__instr = vxi11.Instrument(self._ip_address)
+        except:
+            print("Error: A timeout has occurred trying to connect to the scope. Please try reconnecting.")
+            return
 
 
         
