@@ -1,8 +1,9 @@
-import config
 import subprocess
 import time
 
 import argparse
+
+import pyhubctl
 
 from utils import error, print_color, TermColors
 
@@ -10,6 +11,28 @@ from utils import error, print_color, TermColors
 # uhubctl: symbol lookup error: uhubctl: undefined symbol: libusb_free_container_id_descriptor
 # I restarted the NUC and it worked, but I don't know what went wrong.
 # That error was invisible to the other scripts...
+
+
+class USBPortPower:
+    def __init__(self, usb_phys_port):
+        self.usb_location = ".".join(usb_phys_port.split(".")[:-1])
+        self.usb_port = usb_phys_port.split(".")[-1]
+        self.phc = pyhubctl.PyHubCtl()
+
+    def cycle(self):
+        self.phc.run(
+            pyhubctl.Configuration(action="cycle", location=self.usb_location, ports=self.usb_port)
+        )
+
+    def off(self):
+        self.phc.run(
+            pyhubctl.Configuration(action="off", location=self.usb_location, ports=self.usb_port)
+        )
+
+    def on(self):
+        self.phc.run(
+            pyhubctl.Configuration(action="on", location=self.usb_location, ports=self.usb_port)
+        )
 
 
 def usbPowerCycle(usb_phys_port):

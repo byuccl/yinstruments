@@ -7,61 +7,64 @@ import os
 import re
 
 
-SLEEP_TIME = 1
-
 TIMEOUT = 3.0
 
 
-class Interface:
-    def __init__(self, ip_address, port):
+class NetbooterPort:
+    def __init__(self, ip_address, port, timeout=3.0):
+        self._SLEEP_TIME = 1.0
+        self.timeout = timeout
         self.ip_address = ip_address
         self.port = port
 
-    def port_reboot(self, port_num):
+    def __str__(self):
+        return f"{self.ip_address}:{self.port}"
+
+    def reboot(self, port_num):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=TIMEOUT)
 
         s = tn.read_some()
-        time.sleep(SLEEP_TIME)
+        time.sleep(self._self._SLEEP_TIME)
 
         s = ("rb " + str(port_num)).encode("ascii") + b"\r\n\r\n"
         tn.write(s)
-        time.sleep(SLEEP_TIME)
+        time.sleep(self._self._SLEEP_TIME)
         tn.close()
 
-    def port_on(self, port_num):
+    def on(self, port_num):
         # print("On:", port_num)
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=TIMEOUT)
 
         s = tn.read_some()
-        time.sleep(SLEEP_TIME)
+        time.sleep(self._self._SLEEP_TIME)
 
         s = ("pset " + str(port_num) + " 1").encode("ascii") + b"\r\n\r\n"
         tn.write(s)
-        time.sleep(SLEEP_TIME)
+        time.sleep(self._self._SLEEP_TIME)
         tn.close()
 
-    def port_off(self, port_num):
+    def off(self, port_num):
         # print("Off:", port_num)
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=TIMEOUT)
 
         s = tn.read_some()
         # print(s)
-        time.sleep(SLEEP_TIME)
+        time.sleep(self._self._SLEEP_TIME)
 
         s = ("pset " + str(port_num) + " 0").encode("ascii") + b"\r\n\r\n"
         tn.write(s)
-        time.sleep(SLEEP_TIME)
+        time.sleep(self._self._SLEEP_TIME)
         tn.close()
 
     def get_status(self):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=TIMEOUT)
 
         s = tn.read_some()
-        time.sleep(SLEEP_TIME)
+        time.sleep(self._self._SLEEP_TIME)
 
         s = "pshow".encode("ascii") + b"\r\n"
         tn.write(s)
-        time.sleep(SLEEP_TIME)
+        time.sleep(self._self._SLEEP_TIME)
 
         s = ""
         while True:
@@ -74,7 +77,7 @@ class Interface:
 
         return s
 
-    def is_port_on(self, port_num):
+    def is_on(self, port_num):
         text = self.get_status()
         lines = text.splitlines()
 
@@ -92,7 +95,7 @@ class Interface:
 def main():
     ip_address = "192.168.1.100"
     port = 23
-    netbooter = Interface(ip_address, port)
+    netbooter = NetbooterPort(ip_address, port)
     # Get command
     if len(sys.argv) < 2:
         netbooter.print_usage()
