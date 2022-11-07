@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="yinstruments",
     packages=["yinstruments"],
-    version="1.1.0",
+    version="1.2.0",
     description="Experiment device control scripts for BYU's Configurable Computing Lab (https://ccl.byu.edu/)",
     author="Jeff Goeders",
     author_email="jeff.goeders@gmail.com",
