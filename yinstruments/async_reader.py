@@ -1,5 +1,11 @@
 from abc import abstractmethod
 
+import serial
+
+
+class ReaderError(Exception):
+    """This is raised if the AsyncReader encounters an exception"""
+
 
 class AsyncReader:
     """This class can be used for collecting text output asynchronously, and grouping into lines."""
@@ -10,9 +16,12 @@ class AsyncReader:
         self.text = ""
 
     def get_line(self):
-        pass
-
-        new_text = self._get_data()
+        try:
+            new_text = self._get_data()
+        except serial.serialutil.SerialException as e:
+            raise ReaderError(e)
+        except UnicodeEncodeError as e:
+            raise ReaderError(e)
 
         if not new_text:
             return None
