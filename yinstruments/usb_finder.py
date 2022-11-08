@@ -66,7 +66,8 @@ def _find_dev_file(usb_phys_port, ttyType, match_str, interface):
                 print(p.stdout.decode(), "did not match regex.")
                 assert False
     if match_found is None:
-        raise USBFindError("Could not find serial device at USB location " + usb_phys_port)
+        raise USBFindError("Could not find serial device at USB location "
+            + usb_phys_port + ":1." + str(interface))
 
     return match_found
 
