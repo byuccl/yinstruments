@@ -16,6 +16,13 @@ class AsyncReader:
         self.text = ""
 
     def get_line(self):
+        """Return a line from the serial data if there is one available."""
+
+        # If there is already a line in the list from a previous read, then return it.
+        if self.lines:
+            return self.lines.pop(0)
+
+        # Otherwise get some new data and split it into lines, and return the first line.
         try:
             new_text = self._get_data()
         except serial.serialutil.SerialException as e:
