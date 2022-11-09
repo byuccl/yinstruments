@@ -7,10 +7,29 @@ import os
 import re
 
 
-TIMEOUT = 3.0
-
-
 class NetbooterPort:
+    """Controls a single port of a netbooter"""
+
+    def __init__(self, ip_addr, ip_port, netbooter_port, timeout=3.0) -> None:
+        self.netbooter = Netbooter(ip_addr, ip_port, timeout)
+        self.netbooter_port = netbooter_port
+
+    def __str__(self):
+        return f"{self.netbooter}-{self.netbooter_port}"
+
+    def reboot(self):
+        self.netbooter.reboot(self.netbooter_port)
+
+    def on(self):
+        self.netbooter.on(self.netbooter_port)
+
+    def off(self):
+        self.netbooter.off(self.netbooter_port)
+
+
+class Netbooter:
+    """Controls a Netbooter device"""
+
     def __init__(self, ip_address, port, timeout=3.0):
         self._SLEEP_TIME = 1.0
         self.timeout = timeout
