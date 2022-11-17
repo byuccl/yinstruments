@@ -14,22 +14,30 @@ from utils import error, print_color, TermColors
 
 
 class USBPortPower:
+    """
+    This is a simple wrapper around the pyhubctl package and can be used to power on/off USB ports
+    (provided that the USB hub supports this functionality)
+    """
+
     def __init__(self, usb_phys_port):
         self.usb_location = ".".join(usb_phys_port.split(".")[:-1])
         self.usb_port = usb_phys_port.split(".")[-1]
         self.phc = pyhubctl.PyHubCtl()
 
     def cycle(self):
+        """Power cycle port.  Can raise subprocess.CalledProcessError"""
         self.phc.run(
             pyhubctl.Configuration(action="cycle", location=self.usb_location, ports=self.usb_port)
         )
 
     def off(self):
+        """Turn off port.  Can raise subprocess.CalledProcessError"""
         self.phc.run(
             pyhubctl.Configuration(action="off", location=self.usb_location, ports=self.usb_port)
         )
 
     def on(self):
+        """Turn on port.  Can raise subprocess.CalledProcessError"""
         self.phc.run(
             pyhubctl.Configuration(action="on", location=self.usb_location, ports=self.usb_port)
         )
