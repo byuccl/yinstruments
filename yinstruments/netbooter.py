@@ -106,18 +106,18 @@ class Netbooter:
                 return m.group(1) == "ON"
         return None
 
-    def print_usage():
-        print("Incorrect usage!")
-        print(os.path.splitext(__file__)[0], "<on|off|reboot|status> <port_num>")
+def print_usage():
+    print("Incorrect usage!")
+    print(os.path.splitext(__file__)[0], "<on|off|reboot|status> <port_num>")
 
 
 def main():
     ip_address = "192.168.1.100"
     port = 23
-    netbooter = NetbooterPort(ip_address, port)
+    netbooter = Netbooter(ip_address, port)
     # Get command
     if len(sys.argv) < 2:
-        netbooter.print_usage()
+        print_usage()
         return
 
     cmd = sys.argv[1].lower()
@@ -126,21 +126,21 @@ def main():
         return
 
     if len(sys.argv) != 3:
-        netbooter.print_usage()
+        print_usage()
         return
 
     if cmd not in ("on", "off", "reboot"):
-        netbooter.print_usage()
+        print_usage()
         return
 
     port_num = sys.argv[2]
 
     if cmd == "on":
-        netbooter.port_on(port_num)
+        netbooter.on(port_num)
     elif cmd == "off":
-        netbooter.port_off(port_num)
+        netbooter.off(port_num)
     elif cmd == "reboot":
-        netbooter.port_reboot(port_num)
+        netbooter.reboot(port_num)
 
 
 if __name__ == "__main__":
