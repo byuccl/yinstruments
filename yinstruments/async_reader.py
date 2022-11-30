@@ -25,10 +25,10 @@ class AsyncReader:
         # Otherwise get some new data and split it into lines, and return the first line.
         try:
             new_text = self._get_data()
-        except serial.serialutil.SerialException as e:
-            raise ReaderError(e)
-        except UnicodeEncodeError as e:
-            raise ReaderError(e)
+        except serial.serialutil.SerialException as exc:
+            raise ReaderError(exc) from exc
+        except UnicodeEncodeError as exc:
+            raise ReaderError(exc) from exc
 
         if not new_text:
             return None
@@ -36,6 +36,9 @@ class AsyncReader:
         # Clean up string
         new_text = new_text.replace("\r", "")
         new_text = new_text.replace("\0", "")
+
+        if not new_text:
+            return None
 
         lines = new_text.splitlines(keepends=True)
 
@@ -62,6 +65,7 @@ class AsyncReader:
         return self.text
 
     def clear_accumulate(self):
+        """Clear the accumulated text that is return in 'get_accumulate'"""
         self.text = ""
 
     @abstractmethod
