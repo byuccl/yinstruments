@@ -92,7 +92,10 @@ class Netbooter_Port(PDU_Port):
 
     @abstractmethod
     def off(self):
-        #turns off selected port 
+        #turns off selected port
+        self.netbooter.off(self.netbooter_port)
+
+    def off(self):
         self.netbooter.off(self.netbooter_port)
 
 class Netbooter(PDU):

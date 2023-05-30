@@ -59,7 +59,7 @@ def setPowerValue(index, value=1, print=False):
     string_list = list(input)
     string_list[index*2-2] = str(value)
     input = ''.join(string_list)
-    command = ['snmpset', '-v1', '-c', 'public', '192.168.0.216', 'iso.3.6.1.4.1.17420.1.2.9.1.13.0', "s", input]
+    command = ['snmpset', '-v1', '-c', 'public', '192.168.1.250', 'iso.3.6.1.4.1.17420.1.2.9.1.13.0', "s", input]
     # Run the command and capture the output
     output = subprocess.check_output(command)
     # Print the output
