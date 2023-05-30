@@ -5,7 +5,7 @@ import os
 import re
 import pysnmp as snmp
 from abc import ABC, abstractmethod
-
+import subprocess
 
 
 class PDU_Port:
@@ -57,10 +57,10 @@ class Lindy_Port(PDU_Port):
         pass
 
 
-#try monday to use the subprocess command to implement a working Lindy_class
+#try Monday to use the subprocess.run() method command to implement a working Lindy_class
 #command = sys.argv[1]
 # port_num = sys.argv[2]
-# subprocess([]) 
+# subprocess.run([]) 
 
 class Lindy(PDU):
     def __init__(self, ip_addr, port, timeout=3.0):
