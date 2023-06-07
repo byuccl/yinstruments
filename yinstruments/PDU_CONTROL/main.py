@@ -1,11 +1,4 @@
-import telnetlib
-import time
-import sys
 import os
-import re
-import pysnmp
-from abc import ABC, abstractmethod
-import subprocess
 from Lindy import Lindy
 from Netbooter import Netbooter
 from PDU import PduType, PDU
