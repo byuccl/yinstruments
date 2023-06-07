@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from pdu import PDU
 import telnetlib
 import re

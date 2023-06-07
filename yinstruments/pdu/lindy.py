@@ -1,12 +1,5 @@
 import subprocess
-import pysnmp as snmp
 from pdu import PDU
-
-
-# try Monday to use the subprocess.run() method command to implement a working Lindy_class
-# command = sys.argv[1]
-# port_num = sys.argv[2]
-# subprocess.run([])
 
 
 class Lindy(PDU):
