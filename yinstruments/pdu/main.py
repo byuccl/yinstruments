@@ -1,7 +1,7 @@
 import os
-from Lindy import Lindy
-from Netbooter import Netbooter
-from PDU import PduType, PDU
+from lindy import Lindy
+from netbooter import Netbooter
+from pdu import PduType
 
 
 def print_usage():

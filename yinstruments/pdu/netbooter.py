@@ -1,21 +1,13 @@
 from abc import abstractmethod
-from PDU import PDU
+from pdu import PDU
 import telnetlib
 import re
 import time
 
 
 class Netbooter(PDU):
-    def __init__(self, ip_addr, port, timeout=3.0):
-        # creates Netbooter with characteristics of generic PDU class
-        super().__init__(ip_addr, port, timeout)
 
-    @abstractmethod
-    # string function for Netbooter
-    def __str__(self):
-        return f"{self.ip_address}:{self.port}"
 
-    @abstractmethod
     # reboots port on netbooter
     def reboot(self, port_num):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
@@ -28,7 +20,7 @@ class Netbooter(PDU):
         time.sleep(self._SLEEP_TIME)
         tn.close()
 
-    @abstractmethod
+    
     # turns port_num on
     def on(self, port_num):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
@@ -41,7 +33,7 @@ class Netbooter(PDU):
         time.sleep(self._SLEEP_TIME)
         tn.close()
 
-    @abstractmethod
+    
     # turns port_num off
     def off(self, port_num):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
@@ -55,7 +47,7 @@ class Netbooter(PDU):
         time.sleep(self._SLEEP_TIME)
         tn.close()
 
-    @abstractmethod
+    
     def get_status(self):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
@@ -74,10 +66,10 @@ class Netbooter(PDU):
                 break
 
         tn.close()
-
+        #returns a organized graphic of the ports and the status of the ports
         return s
 
-    @abstractmethod
+    
     def is_on(self, port_num):
         text = self.get_status()
         lines = text.splitlines()

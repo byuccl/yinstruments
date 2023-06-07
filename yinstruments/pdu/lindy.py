@@ -1,8 +1,6 @@
-from abc import abstractmethod
-import re
 import subprocess
 import pysnmp as snmp
-from PDU import PDU
+from pdu import PDU
 
 
 # try Monday to use the subprocess.run() method command to implement a working Lindy_class
@@ -12,14 +10,7 @@ from PDU import PDU
 
 
 class Lindy(PDU):
-    def __init__(self, ip_addr, port, timeout=3.0):
-        # creates Lindy with characteristics of generic PDU class
-        super().__init__(ip_addr, port, timeout)
 
-    def __str__(self):
-        return f"{self.ip_address}:{self.port}"
-
-    @abstractmethod
     def on(self, port_num):
         if (
             int(port_num) > 8
@@ -54,7 +45,7 @@ class Lindy(PDU):
         # print that the port_num is now on
         # print("On:", port_num)
 
-    @abstractmethod
+    
     def off(self, port_num):
         if (
             int(port_num) > 8
@@ -86,12 +77,12 @@ class Lindy(PDU):
         # execute the command
         subprocess.check_output(command)
 
-    @abstractmethod
+    
     def reboot(self, port_num):
         self.off(port_num)
         self.on(port_num)
 
-    @abstractmethod
+    
     def get_status(self):
         # command that is going to be executed
         command = [
@@ -106,4 +97,5 @@ class Lindy(PDU):
         output = subprocess.check_output(command)
         # return output
         string = output.decode()[43:60]
+        #return string is a string of comma separated 1's and 0's. 1 means the port is on, 0 means the port is off.
         return string[1:16]
