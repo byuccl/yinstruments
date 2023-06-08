@@ -1,15 +1,16 @@
 import subprocess
 from pdu import PDU
 
+OID = "iso.3.6.1.4.1.17420.1.2.9.1.13.0"  # standard OID for the functions we will be doing
+
 
 class Lindy(PDU):
-
     def on(self, port_num):
         if (
             int(port_num) > 8
         ):  # Since we are working with the LindyIPowerClassic8, we don't want to accept a larger integer than 8
             raise Exception("ERROR: port_num given out of range")
-        OID = "iso.3.6.1.4.1.17420.1.2.9.1.13.0"  # standard OID for the functions we will be doing
+
         status_list = self.get_status(OID).split(",")
 
         for i in range(
@@ -38,7 +39,6 @@ class Lindy(PDU):
         # print that the port_num is now on
         # print("On:", port_num)
 
-    
     def off(self, port_num):
         if (
             int(port_num) > 8
@@ -70,13 +70,11 @@ class Lindy(PDU):
         # execute the command
         subprocess.check_output(command)
 
-    
     def reboot(self, port_num):
         self.off(port_num)
         self.on(port_num)
 
-    
-    def get_status(self):
+    def get_status(self, OID):
         # command that is going to be executed
         command = [
             "snmpwalk",
@@ -84,11 +82,11 @@ class Lindy(PDU):
             "-c",
             "public",
             f"{self.ip_address}",
-            "iso.3.6.1.4.1.17420.1.2.9.1.13.0",
+            f"{OID}",
         ]
         # Run the command and capture the output
         output = subprocess.check_output(command)
         # return output
         string = output.decode()[43:60]
-        #return string is a string of comma separated 1's and 0's. 1 means the port is on, 0 means the port is off.
+        # return string is a string of comma separated 1's and 0's. 1 means the port is on, 0 means the port is off.
         return string[1:16]

@@ -1,7 +1,6 @@
 from abc import abstractmethod
 
 
-
 class PDU:
     # generic class for PDU devices
 

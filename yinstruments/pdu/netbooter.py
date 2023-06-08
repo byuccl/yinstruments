@@ -6,7 +6,6 @@ import time
 
 class Netbooter(PDU):
 
-
     # reboots port on netbooter
     def reboot(self, port_num):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
@@ -19,7 +18,6 @@ class Netbooter(PDU):
         time.sleep(self._SLEEP_TIME)
         tn.close()
 
-    
     # turns port_num on
     def on(self, port_num):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
@@ -32,7 +30,6 @@ class Netbooter(PDU):
         time.sleep(self._SLEEP_TIME)
         tn.close()
 
-    
     # turns port_num off
     def off(self, port_num):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
@@ -46,7 +43,6 @@ class Netbooter(PDU):
         time.sleep(self._SLEEP_TIME)
         tn.close()
 
-    
     def get_status(self):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
@@ -65,10 +61,9 @@ class Netbooter(PDU):
                 break
 
         tn.close()
-        #returns a organized graphic of the ports and the status of the ports
+        # returns a organized graphic of the ports and the status of the ports
         return s
 
-    
     def is_on(self, port_num):
         text = self.get_status()
         lines = text.splitlines()
