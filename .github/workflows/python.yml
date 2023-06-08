@@ -15,11 +15,21 @@ jobs:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
     steps:
       - uses: actions/checkout@v3
+      - name: Get Diff Action
+        uses: technote-space/get-diff-action@v6
+        with: 
+          PATTERNS: | 
+            ./**/*.py
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-
+      - name: Check for syntax errors with pylint
+        run: |
+          pylint --errors-only $(git ls-files --directory scripts --directory bfasst | grep -e ".py$")
+      - name: Analysing the code with pylint
+        run: |
+          pylint ${{ env.GIT_DIFF_FILTERED }}
 
   format:
     runs-on: ubuntu-latest
@@ -27,6 +37,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Run format
       run: |
+        python3 -m pip install --upgrade pip
         pip3 install black
         make format
     - name: Check for formatting errors
