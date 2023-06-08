@@ -1,0 +1,37 @@
+name: Python
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+
+
+jobs:
+  pylint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run format
+      run: |
+        make format
+    - name: Check for formatting errors
+      run: |
+        git diff --exit-code
+        if [ $? -eq 1 ]; then
+          echo "Formatting errors detected. Please run 'make format' and commit the changes."
+          exit 1
+        fi
