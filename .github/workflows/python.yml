@@ -30,7 +30,7 @@ jobs:
           pip3 install pylint
       - name: Check for syntax errors with pylint
         run: |
-          pylint --errors-only $(git ls-files --directory scripts --directory bfasst | grep -e ".py$")
+          pylint --errors-only $(git ls-files '.py$')
       - name: Analysing the code with pylint
         run: |
           pylint ${{ env.GIT_DIFF_FILTERED }}
