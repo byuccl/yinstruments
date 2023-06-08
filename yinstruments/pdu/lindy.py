@@ -74,7 +74,7 @@ class Lindy(PDU):
         self.off(port_num)
         self.on(port_num)
 
-    def get_status(self, OID):
+    def get_status(self, OID="iso.3.6.1.4.1.17420.1.2.9.1.13.0"):
         # command that is going to be executed
         command = [
             "snmpwalk",
