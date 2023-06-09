@@ -20,21 +20,29 @@ jobs:
         with: 
           PATTERNS: | 
             ./**/*.py
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+        if: env.GIT_DIFF
+
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
           pip3 install -e .
           pip3 install pylint
+        if: env.GIT_DIFF
+
       - name: Check for syntax errors with pylint
         run: |
           pylint --errors-only $(git ls-files '*.py')
-      - name: Analysing the code with pylint
+        if: env.GIT_DIFF
+
+      - name: Analyzing the code with pylint
         run: |
           pylint ${{ env.GIT_DIFF_FILTERED }}
+        if: env.GIT_DIFF
 
   format:
     runs-on: ubuntu-latest
