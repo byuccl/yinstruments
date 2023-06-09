@@ -1,0 +1,64 @@
+name: Python
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+
+
+jobs:
+  pylint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get Diff Action
+        uses: technote-space/get-diff-action@v6
+        with: 
+          PATTERNS: | 
+            ./**/*.py
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+        if: env.GIT_DIFF
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install -e .
+          pip3 install pylint
+        if: env.GIT_DIFF
+
+      - name: Check for syntax errors with pylint
+        run: |
+          pylint --errors-only $(git ls-files '*.py')
+        if: env.GIT_DIFF
+
+      - name: Analyzing the code with pylint
+        run: |
+          pylint ${{ env.GIT_DIFF_FILTERED }}
+        if: env.GIT_DIFF
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip3 install black
+    - name: Run format
+      run: |
+        make format
+    - name: Check for formatting errors
+      run: |
+        git diff --exit-code
+        if [ $? -eq 1 ]; then
+          echo "Formatting errors detected. Please run 'make format' and commit the changes."
+          exit 1
+        fi

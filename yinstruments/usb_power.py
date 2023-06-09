@@ -1,11 +1,9 @@
 import subprocess
 import time
-
+import sys
 import argparse
 
 import pyhubctl
-
-from utils import error, print_color, TermColors
 
 # TODO: At one point uhubctl failed with the following error:
 # uhubctl: symbol lookup error: uhubctl: undefined symbol: libusb_free_container_id_descriptor
@@ -113,9 +111,9 @@ def main():
     result = usbPowerCycle(args.usb_physical_port)
 
     if True:
-        print_color(TermColors.GREEN, "Success")
+        print("Success")
     else:
-        error("USB power cycle failed")
+        sys.exit("USB power cycle failed")
 
 
 if __name__ == "__main__":

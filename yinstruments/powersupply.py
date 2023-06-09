@@ -1,5 +1,4 @@
 import vxi11
-import config
 
 
 class PowerSupply:
@@ -128,12 +127,8 @@ class PowerSupply:
 
 
 if __name__ == "__main__":
-    instr = PowerSupply(config.IP_POWERSUPPLY)
+    ip = "192.168.0.100"
+    instr = PowerSupply(ip)
 
-    # Turn on Zedboard
-    # instr.set_channel_voltage(config.POWER_SUPPLY_CHANNEL_ZEDBOARD, config.ZEDBOARD_VOLTAGE)
-    instr.disable_channel(config.POWER_SUPPLY_CHANNEL_ZEDBOARD)
-    # instr.enable_channel(config.POWER_SUPPLY_CHANNEL_ZEDBOARD)
-
-    # instr.set_channel_voltage(config.POWER_SUPPLY_CHANNEL_SRAM, 1.0)
-    # instr.enable_channel(config.POWER_SUPPLY_CHANNEL_SRAM)
+    instr.disable_channel(1)
+    # instr.enable_channel(1)
