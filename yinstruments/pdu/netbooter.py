@@ -5,7 +5,6 @@ import time
 
 
 class Netbooter(PDU):
-
     # reboots port on netbooter
     def reboot(self, port_num):
         tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
@@ -69,9 +68,7 @@ class Netbooter(PDU):
         lines = text.splitlines()
 
         for l in lines:
-            m = re.match(
-                r"\d+\|\s+Outlet" + str(port_num) + r"\|\s+(\w+)\s*\|", l.strip()
-            )
+            m = re.match(r"\d+\|\s+Outlet" + str(port_num) + r"\|\s+(\w+)\s*\|", l.strip())
             if m:
                 return m.group(1) == "ON"
         return None
