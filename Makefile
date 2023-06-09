@@ -13,8 +13,8 @@ doc:
 format:
 	find . -iname "*.py" -exec black -q -l 100 {} \;
 
-lint:
-	pylint ygrader
+pylint:
+	pylint $$(git ls-files '*.py')
 
 env:
 	python3 -m venv .venv
