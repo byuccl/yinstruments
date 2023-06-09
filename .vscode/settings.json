@@ -1,6 +1,8 @@
 {
     "python.pythonPath": "/usr/bin/python3",
     "python.formatting.blackPath": "/home/nathanmain20/.local/lib/python3.8/site-packages",
-    "python.formatting.blackArgs": ["--line-length", "100"]
-    
+    "python.formatting.blackArgs": [
+        "--line-length",
+        "100"
+    ]
 }

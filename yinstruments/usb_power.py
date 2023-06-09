@@ -44,7 +44,6 @@ class USBPortPower:
 
 
 def usbPowerCycle(usb_phys_port):
-
     usb_location = ".".join(usb_phys_port.split(".")[:-1])
     usb_port = usb_phys_port.split(".")[-1]
     print(" ".join(["uhubctl", "-a", "off", "-l", usb_location, "-p", usb_port]))
