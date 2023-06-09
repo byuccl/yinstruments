@@ -1,5 +1,4 @@
 import vxi11
-import config
 
 
 class PowerSupply:
