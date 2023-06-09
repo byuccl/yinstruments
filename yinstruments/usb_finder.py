@@ -27,7 +27,6 @@ def find_dev_file_ttyACM(usb_phys_port, interface):
 
 
 def _find_dev_file(usb_phys_port, ttyType, match_str, interface):
-
     """This function will search through all /dev devices and find the one that maps to the given
     usb_phys_port, ttyType, regex match string and interface.
 
@@ -66,8 +65,9 @@ def _find_dev_file(usb_phys_port, ttyType, match_str, interface):
                 print(p.stdout.decode(), "did not match regex.")
                 assert False
     if match_found is None:
-        raise USBFindError("Could not find serial device at USB location "
-            + usb_phys_port + ":1." + str(interface))
+        raise USBFindError(
+            "Could not find serial device at USB location " + usb_phys_port + ":1." + str(interface)
+        )
 
     return match_found
 

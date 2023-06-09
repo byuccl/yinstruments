@@ -10,6 +10,9 @@ test:
 doc:
 	cd doc && make html
 
+format:
+	find . -iname "*.py" -exec black -q -l 100 {} \;
+
 lint:
 	pylint ygrader
 
