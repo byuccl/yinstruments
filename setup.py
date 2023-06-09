@@ -8,5 +8,5 @@ setup(
     author="Jeff Goeders",
     author_email="jeff.goeders@gmail.com",
     url="https://github.com/byuccl/yinstruments",
-    install_requires=["pyudev", "pyserial", "pysnmp", "python-vxi11"],
+    install_requires=["pyudev", "pyserial", "pysnmp", "python-vxi11", "pyhubctl"],
 )
