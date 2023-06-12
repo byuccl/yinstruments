@@ -1,11 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="yinstruments",
-    packages=["yinstruments", "yinstruments.pdu"],
-    version="1.2.2",
-    packages=["yinstruments"],
-    version="1.3.0",
+    packages=find_packages(),
+    version="1.3.1",
     description="Experiment device control scripts for BYU's Configurable Computing Lab (https://ccl.byu.edu/)",
     author="Jeff Goeders",
     author_email="jeff.goeders@gmail.com",
