@@ -62,3 +62,15 @@ jobs:
           echo "Formatting errors detected. Please run 'make format' and commit the changes."
           exit 1
         fi
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          make env
+      - name: Run tests
+        run: |
+          make test

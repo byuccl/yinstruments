@@ -1,5 +1,5 @@
 import subprocess
-from pdu import PDU
+from .pdu import PDU
 
 OID = "iso.3.6.1.4.1.17420.1.2.9.1.13.0"  # standard OID for the functions we will be doing
 
