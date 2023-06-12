@@ -11,8 +11,8 @@ doc:
 	cd doc && make html
 
 format:
-	find . -iname "*.py" -exec black -q -l 100 {} \;
-
+	black -q -l 100 $$(git ls-files '*.py')
+	
 pylint:
 	pylint $$(git ls-files '*.py')
 
