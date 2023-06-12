@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="yinstruments",
-    packages=["yinstruments"],
+    packages=["yinstruments", "yinstruments.pdu"],
     version="1.2.2",
     description="Experiment device control scripts for BYU's Configurable Computing Lab (https://ccl.byu.edu/)",
     author="Jeff Goeders",
