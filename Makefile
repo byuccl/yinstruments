@@ -7,7 +7,7 @@ package:
 test: 
 	$(IN_ENV) pip install .
 	$(IN_ENV) cd test && python3 -m unittest
-	$(IN_ENV) pip uninstall .
+	$(IN_ENV) pip uninstall -y yinstruments
 
 doc:
 	cd doc && make html
