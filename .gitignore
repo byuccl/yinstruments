@@ -1,3 +1,4 @@
 /dist/*
 /yinstruments.egg-info
 *.pyc
+.venv

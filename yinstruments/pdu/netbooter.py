@@ -1,4 +1,4 @@
-from pdu import PDU
+from .pdu import PDU
 import telnetlib
 import re
 import time
