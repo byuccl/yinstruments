@@ -2,3 +2,4 @@
 /yinstruments.egg-info
 *.pyc
 .venv
+/build

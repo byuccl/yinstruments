@@ -5,7 +5,9 @@ package:
 	$(IN_ENV) twine upload dist/*
 
 test: 
+	$(IN_ENV) pip install .
 	$(IN_ENV) cd test && python3 -m unittest
+	$(IN_ENV) pip uninstall .
 
 doc:
 	cd doc && make html
@@ -18,7 +20,6 @@ pylint:
 
 env:
 	python3 -m venv .venv
-	$(IN_ENV) pip install -e .
 	$(IN_ENV) pip install -r requirements.txt
 
 
