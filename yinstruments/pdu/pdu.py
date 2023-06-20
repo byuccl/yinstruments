@@ -1,33 +1,37 @@
+"""This file contains the top level PDU class"""
+
 from abc import abstractmethod
 
 
 class PDU:
-    # generic class for PDU devices
+
+    """Generic class for PDU"""
 
     # initializes your PDU with callable characteristics
     @abstractmethod
     def __init__(self, ip_address, port, timeout=3.0):
-        self._SLEEP_TIME = 1.0
+        self.SLEEP_TIME = 1.0
         self.timeout = timeout
         self.ip_address = ip_address
         self.port = port
 
     @abstractmethod
     def __str__(self):
-        return f"{self.ip_address}:{self.port}"
+        """This function returns a string describing the PDU's
+        important attributes"""
 
     @abstractmethod
-    def reboot(self):
-        pass
+    def reboot(self, port_num):
+        """This function will reboot a port you select"""
 
     @abstractmethod
-    def on(self):
-        pass
+    def on(self, port_num):
+        """This funtion will turn on a port you select"""
 
     @abstractmethod
-    def off(self):
-        pass
+    def off(self, port_num):
+        """This function will turn off a port you select"""
 
     @abstractmethod
     def get_status(self):
-        pass
+        """This function will get the status of your PDU"""

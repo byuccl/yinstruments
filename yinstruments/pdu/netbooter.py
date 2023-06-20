@@ -1,74 +1,85 @@
-from .pdu import PDU
+"""This file contians the Netbooter class which inherits
+from the PDU class"""
+
 import telnetlib
-import re
 import time
+from .pdu import PDU
 
 
 class Netbooter(PDU):
+    """This is the Netbooter class"""
+
+    def __init__(self, ip_address, port, timeout=3.0):
+        super().__init__(ip_address, port)
+
+    def __str__(self):
+        return f"{self.ip_address}:{self.port}"
+
     # reboots port on netbooter
     def reboot(self, port_num):
-        tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
+        telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
-        s = tn.read_some()
-        time.sleep(self._SLEEP_TIME)
+        string = telnet.read_some()
+        time.sleep(self.SLEEP_TIME)
 
-        s = ("rb " + str(port_num)).encode("ascii") + b"\r\n\r\n"
-        tn.write(s)
-        time.sleep(self._SLEEP_TIME)
-        tn.close()
+        string = ("rb " + str(port_num)).encode("ascii") + b"\r\n\r\n"
+        telnet.write(string)
+        time.sleep(self.SLEEP_TIME)
+        telnet.close()
 
     # turns port_num on
     def on(self, port_num):
-        tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
+        telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
-        s = tn.read_some()
-        time.sleep(self._SLEEP_TIME)
+        string = telnet.read_some()
+        time.sleep(self.SLEEP_TIME)
 
-        s = ("pset " + str(port_num) + " 1").encode("ascii") + b"\r\n\r\n"
-        tn.write(s)
-        time.sleep(self._SLEEP_TIME)
-        tn.close()
+        string = ("pset " + str(port_num) + " 1").encode("ascii") + b"\r\n\r\n"
+        telnet.write(string)
+        time.sleep(self.SLEEP_TIME)
+        telnet.close()
 
     # turns port_num off
     def off(self, port_num):
-        tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
+        telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
-        s = tn.read_some()
+        string = telnet.read_some()
 
-        time.sleep(self._SLEEP_TIME)
+        time.sleep(self.SLEEP_TIME)
 
-        s = ("pset " + str(port_num) + " 0").encode("ascii") + b"\r\n\r\n"
-        tn.write(s)
-        time.sleep(self._SLEEP_TIME)
-        tn.close()
+        string = ("pset " + str(port_num) + " 0").encode("ascii") + b"\r\n\r\n"
+        telnet.write(string)
+        time.sleep(self.SLEEP_TIME)
+        telnet.close()
 
     def get_status(self):
-        tn = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
+        telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
-        s = tn.read_some()
-        time.sleep(self._SLEEP_TIME)
+        string = telnet.read_some()
+        time.sleep(self.SLEEP_TIME)
 
-        s = "pshow".encode("ascii") + b"\r\n"
-        tn.write(s)
-        time.sleep(self._SLEEP_TIME)
-
-        s = ""
+        string = "pshow".encode("ascii") + b"\r\n"
+        telnet.write(string)
+        time.sleep(self.SLEEP_TIME)
+        string = ""
         while True:
-            text = tn.read_eager()
-            s += text.decode()
+            text = telnet.read_eager()
+            string += text.decode()
             if len(text) == 0:
                 break
 
-        tn.close()
+        telnet.close()
         # returns a organized graphic of the ports and the status of the ports
-        return s
+        return string
 
-    def is_on(self, port_num):
-        text = self.get_status()
-        lines = text.splitlines()
+    # def is_on(self, port_num):
+    #     text = self.get_status()
+    #     lines = text.splitlines()
 
-        for l in lines:
-            m = re.match(r"\d+\|\s+Outlet" + str(port_num) + r"\|\s+(\w+)\s*\|", l.strip())
-            if m:
-                return m.group(1) == "ON"
-        return None
+    #     for line in lines:
+    #         message = re.match(
+    #             r"\d+\|\s+Outlet" + str(port_num) + r"\|\s+(\w+)\s*\|", line.strip()
+    #         )
+    #         if message:
+    #             return message.group(1) == "ON"
+    #     return None

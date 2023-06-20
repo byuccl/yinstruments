@@ -1,10 +1,14 @@
+"""This is the file that will be run to execute calls on your PDU"""
+
+import argparse
 from netbooter import Netbooter
 from lindy import Lindy
-import argparse
 
 
 def main():
-    # create instance of argparse
+    """Main function: creates instance of argparse and lays out the
+    logic for your inputs."""
+
     arguments = argparse.ArgumentParser(description="Command Line Arguments")
     arguments.add_argument(
         "dev_type",
@@ -19,7 +23,9 @@ def main():
         help="string of command type to issue to PDU",
         choices=("on", "off", "reboot", "get_status"),
     )
-    arguments.add_argument("port_num", type=str, help="Port number to perform action on")
+    arguments.add_argument(
+        "port_num", type=str, help="Port number to perform action on"
+    )
     args = arguments.parse_args()
 
     # These four variables are your arguments you will enter into the command line

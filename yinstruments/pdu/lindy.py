@@ -1,17 +1,28 @@
+"""This file contains the Lindy class which inherits from the 
+PDU class"""
+
 import subprocess
 from .pdu import PDU
 
-OID = "iso.3.6.1.4.1.17420.1.2.9.1.13.0"  # standard OID for the functions we will be doing
+# standard OID for the functions we will be doing
+OID = "iso.3.6.1.4.1.17420.1.2.9.1.13.0"
 
 
 class Lindy(PDU):
+    """This is the Lindy class"""
+
+    def __init__(self, ip_address, port, timeout=3.0):
+        super().__init__(ip_address, port)
+
+    def __str__(self):
+        return f"{self.ip_address}:{self.port}"
+
     def on(self, port_num):
-        if (
-            int(port_num) > 8
-        ):  # Since we are working with the LindyIPowerClassic8, we don't want to accept a larger integer than 8
+        if int(port_num) > 8:  # Since we are working with the LindyIPowerClassic8,
+            # we don't want to accept a larger integer than 8
             raise Exception("ERROR: port_num given out of range")
 
-        status_list = self.get_status(OID).split(",")
+        status_list = self.get_status().split(",")
 
         for i in range(
             1, len(status_list) + 1
@@ -40,12 +51,10 @@ class Lindy(PDU):
         # print("On:", port_num)
 
     def off(self, port_num):
-        if (
-            int(port_num) > 8
-        ):  # Since we are working with the LindyIPowerClassic8, we don't want to accept a larger integer than 8
+        if int(port_num) > 8:  # Since we are working with the LindyIPowerClassic8,
+            # we don't want to accept a larger integer than 8
             raise Exception("ERROR: port_num given out of range")
-        OID = "iso.3.6.1.4.1.17420.1.2.9.1.13.0"  # standard OID for the functions we will be doing
-        status_list = self.get_status(OID).split(",")
+        status_list = self.get_status().split(",")
 
         for i in range(
             1, len(status_list) + 1
@@ -74,7 +83,7 @@ class Lindy(PDU):
         self.off(port_num)
         self.on(port_num)
 
-    def get_status(self, OID="iso.3.6.1.4.1.17420.1.2.9.1.13.0"):
+    def get_status(self):
         # command that is going to be executed
         command = [
             "snmpwalk",
@@ -88,5 +97,5 @@ class Lindy(PDU):
         output = subprocess.check_output(command)
         # return output
         string = output.decode()[43:60]
-        # return string is a string of comma separated 1's and 0's. 1 means the port is on, 0 means the port is off.
+        # return string is a string of comma separated 1's and 0's.
         return string[1:16]
