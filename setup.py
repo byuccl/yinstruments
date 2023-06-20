@@ -9,4 +9,5 @@ setup(
     author_email="jeff.goeders@gmail.com",
     url="https://github.com/byuccl/yinstruments",
     install_requires=["pyudev", "pyserial", "pysnmp", "python-vxi11", "pyhubctl"],
+    entry_points={"console_scripts": ["pdu = yinstruments.pdu.cli:main"]},
 )

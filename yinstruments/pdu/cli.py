@@ -1,5 +1,4 @@
-"""This is the file that will be run to execute calls on your PDU"""
-
+"""This the file that will run to execute calls on your PDU"""
 import argparse
 from .netbooter import Netbooter
 from .lindy import Lindy
