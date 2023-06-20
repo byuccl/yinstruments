@@ -21,6 +21,7 @@ pylint:
 env:
 	python3 -m venv .venv
 	$(IN_ENV) pip install -r requirements.txt
+	$(IN_ENV) pip install -e .
 
 
 .PHONY: test doc
