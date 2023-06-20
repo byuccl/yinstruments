@@ -1,5 +1,5 @@
-from netbooter import Netbooter
-from lindy import Lindy
+from .netbooter import Netbooter
+from .lindy import Lindy
 import argparse
 
 
