@@ -1,8 +1,8 @@
 """This is the file that will be run to execute calls on your PDU"""
 
 import argparse
-from netbooter import Netbooter
-from lindy import Lindy
+from .netbooter import Netbooter
+from .lindy import Lindy
 
 
 def main():

@@ -20,11 +20,11 @@ class Netbooter(PDU):
         telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
         string = telnet.read_some()
-        time.sleep(self.SLEEP_TIME)
+        time.sleep(self.sleep_time)
 
         string = ("rb " + str(port_num)).encode("ascii") + b"\r\n\r\n"
         telnet.write(string)
-        time.sleep(self.SLEEP_TIME)
+        time.sleep(self.sleep_time)
         telnet.close()
 
     # turns port_num on
@@ -32,11 +32,11 @@ class Netbooter(PDU):
         telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
         string = telnet.read_some()
-        time.sleep(self.SLEEP_TIME)
+        time.sleep(self.sleep_time)
 
         string = ("pset " + str(port_num) + " 1").encode("ascii") + b"\r\n\r\n"
         telnet.write(string)
-        time.sleep(self.SLEEP_TIME)
+        time.sleep(self.sleep_time)
         telnet.close()
 
     # turns port_num off
@@ -45,22 +45,22 @@ class Netbooter(PDU):
 
         string = telnet.read_some()
 
-        time.sleep(self.SLEEP_TIME)
+        time.sleep(self.sleep_time)
 
         string = ("pset " + str(port_num) + " 0").encode("ascii") + b"\r\n\r\n"
         telnet.write(string)
-        time.sleep(self.SLEEP_TIME)
+        time.sleep(self.sleep_time)
         telnet.close()
 
     def get_status(self):
         telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
         string = telnet.read_some()
-        time.sleep(self.SLEEP_TIME)
+        time.sleep(self.sleep_time)
 
         string = "pshow".encode("ascii") + b"\r\n"
         telnet.write(string)
-        time.sleep(self.SLEEP_TIME)
+        time.sleep(self.sleep_time)
         string = ""
         while True:
             text = telnet.read_eager()
