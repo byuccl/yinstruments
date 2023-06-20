@@ -10,7 +10,7 @@ class PDU:
     # initializes your PDU with callable characteristics
     @abstractmethod
     def __init__(self, ip_address, port, timeout=3.0):
-        self.SLEEP_TIME = 1.0
+        self.sleep_time = 1.0
         self.timeout = timeout
         self.ip_address = ip_address
         self.port = port
