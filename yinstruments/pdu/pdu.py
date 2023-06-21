@@ -33,5 +33,9 @@ class PDU:
         """This function will turn off a port you select"""
 
     @abstractmethod
+    def is_on(self, port_num):
+        """This function will return ON if selected port is on"""
+
+    @abstractmethod
     def get_status(self):
         """This function will get the status of your PDU"""

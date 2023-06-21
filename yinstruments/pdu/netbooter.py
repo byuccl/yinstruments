@@ -3,6 +3,7 @@ from the PDU class"""
 
 import telnetlib
 import time
+import re
 from .pdu import PDU
 
 
@@ -15,7 +16,6 @@ class Netbooter(PDU):
     def __str__(self):
         return f"{self.ip_address}:{self.port}"
 
-    # reboots port on netbooter
     def reboot(self, port_num):
         telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
@@ -27,7 +27,6 @@ class Netbooter(PDU):
         time.sleep(self.sleep_time)
         telnet.close()
 
-    # turns port_num on
     def on(self, port_num):
         telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
@@ -39,7 +38,6 @@ class Netbooter(PDU):
         time.sleep(self.sleep_time)
         telnet.close()
 
-    # turns port_num off
     def off(self, port_num):
         telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
 
@@ -72,14 +70,14 @@ class Netbooter(PDU):
         # returns a organized graphic of the ports and the status of the ports
         return string
 
-    # def is_on(self, port_num):
-    #     text = self.get_status()
-    #     lines = text.splitlines()
+    def is_on(self, port_num):
+        text = self.get_status()
+        lines = text.splitlines()
 
-    #     for line in lines:
-    #         message = re.match(
-    #             r"\d+\|\s+Outlet" + str(port_num) + r"\|\s+(\w+)\s*\|", line.strip()
-    #         )
-    #         if message:
-    #             return message.group(1) == "ON"
-    #     return None
+        for line in lines:
+            message = re.match(
+                r"\d+\|\s+Outlet" + str(port_num) + r"\|\s+(\w+)\s*\|", line.strip()
+            )
+            if message:
+                return message.group(1) == "ON"
+        return "OFF"

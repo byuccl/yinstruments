@@ -54,6 +54,7 @@ class Lindy(PDU):
         if int(port_num) > 8:  # Since we are working with the LindyIPowerClassic8,
             # we don't want to accept a larger integer than 8
             raise Exception("ERROR: port_num given out of range")
+
         status_list = self.get_status().split(",")
 
         for i in range(
@@ -99,3 +100,13 @@ class Lindy(PDU):
         string = output.decode()[43:60]
         # return string is a string of comma separated 1's and 0's.
         return string[1:16]
+
+    def is_on(self, port_num):
+        if int(port_num) > 8:  # Since we are working with the LindyIPowerClassic8,
+            # we don't want to accept a larger integer than 8
+            raise Exception("ERROR: port_num given out of range")
+
+        status_list = self.get_status().split(",")
+        if status_list[int(port_num) - 1] == "1":
+            return "ON"
+        return "OFF"

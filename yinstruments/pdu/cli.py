@@ -20,7 +20,7 @@ def main():
         "command",
         type=str,
         help="string of command type to issue to PDU",
-        choices=("on", "off", "reboot", "get_status"),
+        choices=("on", "off", "is_on", "reboot", "get_status"),
     )
     arguments.add_argument(
         "port_num", type=str, help="Port number to perform action on"
@@ -44,6 +44,8 @@ def main():
             netbooter.off(port_num)
         elif cmd == "reboot":
             netbooter.reboot(port_num)
+        elif cmd == "is_on":
+            print(netbooter.is_on(port_num))
         elif cmd == "get_status":
             print(netbooter.get_status())
 
@@ -57,6 +59,8 @@ def main():
             lindy.off(port_num)
         elif cmd == "reboot":
             lindy.reboot(port_num)
+        elif cmd == "is_on":
+            print(lindy.is_on(port_num))
         elif cmd == "get_status":
             print(lindy.get_status())
 
