@@ -75,9 +75,7 @@ class Netbooter(PDU):
         lines = text.splitlines()
 
         for line in lines:
-            message = re.match(
-                r"\d+\|\s+Outlet" + str(port_num) + r"\|\s+(\w+)\s*\|", line.strip()
-            )
+            message = re.match(r"\d+\|\s+Outlet" + str(port_num) + r"\|\s+(\w+)\s*\|", line.strip())
             if message:
                 return message.group(1) == "ON"
         return "OFF"

@@ -22,9 +22,7 @@ def main():
         help="string of command type to issue to PDU",
         choices=("on", "off", "is_on", "reboot", "get_status"),
     )
-    arguments.add_argument(
-        "port_num", type=str, help="Port number to perform action on"
-    )
+    arguments.add_argument("port_num", type=str, help="Port number to perform action on")
     args = arguments.parse_args()
 
     # These four variables are your arguments you will enter into the command line
