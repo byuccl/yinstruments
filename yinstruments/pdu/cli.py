@@ -34,33 +34,21 @@ def main():
 
     if dev_type.lower() == "netbooter":
         port = 23
-        netbooter = Netbooter(ip_address, port)
-
-        if cmd == "on":
-            netbooter.on(port_num)
-        elif cmd == "off":
-            netbooter.off(port_num)
-        elif cmd == "reboot":
-            netbooter.reboot(port_num)
-        elif cmd == "is_on":
-            print(netbooter.is_on(port_num))
-        elif cmd == "get_status":
-            print(netbooter.get_status())
-
+        pdu = Netbooter(ip_address, port)
     elif dev_type == "lindy":
         port = 80
-        lindy = Lindy(ip_address, port)
+        pdu = Lindy(ip_address, port)
 
-        if cmd == "on":
-            lindy.on(port_num)
-        elif cmd == "off":
-            lindy.off(port_num)
-        elif cmd == "reboot":
-            lindy.reboot(port_num)
-        elif cmd == "is_on":
-            print(lindy.is_on(port_num))
-        elif cmd == "get_status":
-            print(lindy.get_status())
+    if cmd == "on":
+        pdu.on(port_num)
+    elif cmd == "off":
+        pdu.off(port_num)
+    elif cmd == "reboot":
+        pdu.reboot(port_num)
+    elif cmd == "is_on":
+        print(pdu.is_on(port_num))
+    elif cmd == "get_status":
+        print(pdu.get_status())
 
 
 if __name__ == "__main__":
