@@ -3,9 +3,11 @@
 from abc import abstractmethod
 from enum import Enum
 
+
 class PDUType(Enum):
     Netbooter = 1
     Lindy = 2
+
 
 class PDU:
 
