@@ -13,7 +13,7 @@ doc:
 	cd doc && make html
 
 format:
-	black -q -l 100 $$(git ls-files '*.py')
+	$(IN_ENV) black -q -l 100 $$(git ls-files '*.py')
 
 pylint:
 	pylint $$(git ls-files '*.py')

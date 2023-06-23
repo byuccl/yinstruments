@@ -1,10 +1,13 @@
+"""This the file that will run to execute calls on your PDU"""
+import argparse
 from .netbooter import Netbooter
 from .lindy import Lindy
-import argparse
 
 
 def main():
-    # create instance of argparse
+    """Main function: creates instance of argparse and lays out the
+    logic for your inputs."""
+
     arguments = argparse.ArgumentParser(description="Command Line Arguments")
     arguments.add_argument(
         "dev_type",
@@ -17,7 +20,7 @@ def main():
         "command",
         type=str,
         help="string of command type to issue to PDU",
-        choices=("on", "off", "reboot", "get_status"),
+        choices=("on", "off", "is_on", "reboot", "get_status"),
     )
     arguments.add_argument("port_num", type=str, help="Port number to perform action on")
     args = arguments.parse_args()
@@ -39,6 +42,8 @@ def main():
             netbooter.off(port_num)
         elif cmd == "reboot":
             netbooter.reboot(port_num)
+        elif cmd == "is_on":
+            print(netbooter.is_on(port_num))
         elif cmd == "get_status":
             print(netbooter.get_status())
 
@@ -52,6 +57,8 @@ def main():
             lindy.off(port_num)
         elif cmd == "reboot":
             lindy.reboot(port_num)
+        elif cmd == "is_on":
+            print(lindy.is_on(port_num))
         elif cmd == "get_status":
             print(lindy.get_status())
 
