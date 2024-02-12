@@ -12,7 +12,7 @@ test: .venv/bin/activate
 doc:
 	cd doc && make html
 
-format:
+format: .venv/bin/activate
 	$(IN_ENV) black -q -l 100 $$(git ls-files '*.py')
 
 pylint:
