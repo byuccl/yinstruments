@@ -1,2 +1,1 @@
-twine
-black
+black==24.1.1
