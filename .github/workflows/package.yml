@@ -12,9 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Environment
-      run: make env
-
     - name: Pypi credentials
       run: |  
         echo "[pypi]" > ~/.pypirc

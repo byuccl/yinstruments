@@ -1,10 +1,10 @@
-IN_ENV = if [ -e .venv/bin/activate ]; then . .venv/bin/activate; fi;
+IN_ENV = .venv/bin/activate;
 
-package:
+package: .venv/bin/activate
 	$(IN_ENV) python setup.py sdist
 	$(IN_ENV) twine upload dist/*
 
-test: 
+test: .venv/bin/activate
 	$(IN_ENV) pip install .
 	$(IN_ENV) cd test && python3 -m unittest
 	$(IN_ENV) pip uninstall -y yinstruments
