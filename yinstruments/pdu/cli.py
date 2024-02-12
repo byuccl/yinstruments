@@ -14,7 +14,7 @@ def main():
         "dev_type",
         type=str,
         help="Brand of pdu you are communicating with",
-        choices=("netbooter, lindy"),
+        choices=("netbooter", "lindy"),
     )
     arguments.add_argument("ip_address", type=str, help="IP of your pdu")
     arguments.add_argument(
