@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="yinstruments",
     packages=find_packages(),
-    version="1.3.2",
+    version="1.3.3",
     description="Experiment device control scripts for BYU's Configurable Computing Lab (https://ccl.byu.edu/)",
     author="Jeff Goeders",
     author_email="jeff.goeders@gmail.com",

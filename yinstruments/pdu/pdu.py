@@ -10,7 +10,6 @@ class PDUType(Enum):
 
 
 class PDU:
-
     """Generic class for PDU"""
 
     # initializes your PDU with callable characteristics
