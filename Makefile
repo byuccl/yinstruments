@@ -1,4 +1,4 @@
-IN_ENV = .venv/bin/activate;
+IN_ENV = . .venv/bin/activate;
 
 package: .venv/bin/activate
 	$(IN_ENV) python setup.py sdist
