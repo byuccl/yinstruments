@@ -12,10 +12,13 @@ class PDUType(Enum):
 class PDU:
     """Generic class for PDU"""
 
+    DEFAULT_TIMEOUT_TIME = 3.0      # 3 seconds
+    DEFAULT_COMMAND_DELAY = 0.05    # 50 ms
+
     # initializes your PDU with callable characteristics
     @abstractmethod
-    def __init__(self, ip_address, port, timeout=3.0):
-        self.sleep_time = 1.0
+    def __init__(self, ip_address, port, timeout=DEFAULT_TIMEOUT_TIME, command_delay=DEFAULT_COMMAND_DELAY):
+        self.sleep_time = command_delay
         self.timeout = timeout
         self.ip_address = ip_address
         self.port = port
