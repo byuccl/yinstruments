@@ -46,8 +46,10 @@ class Netbooter(PDU):
     """
 
     DEFAULT_NETBOOTER_PORT = 23
+    DEFAULT_TIMEOUT_TIME = 3.0      # 3 seconds
+    DEFAULT_NETBOOTER_DELAY = 0.05    # 50 ms
     
-    def __init__(self, ip_address, port=DEFAULT_NETBOOTER_PORT, timeout=PDU.DEFAULT_TIMEOUT_TIME, command_delay=PDU.DEFAULT_COMMAND_DELAY):
+    def __init__(self, ip_address, port=DEFAULT_NETBOOTER_PORT, timeout=PDU.DEFAULT_TIMEOUT_TIME, command_delay=DEFAULT_NETBOOTER_DELAY):
         """ Netbooter constructor.
         ip_address: IP address of the netbooter
         port: the TCP port used for the telnet session. """

@@ -13,7 +13,7 @@ class PDU:
     """Generic class for PDU"""
 
     DEFAULT_TIMEOUT_TIME = 3.0      # 3 seconds
-    DEFAULT_COMMAND_DELAY = 0.05    # 50 ms
+    DEFAULT_COMMAND_DELAY = 1.0     # This is the original delay that may be needed by the Lindy. It is probably excessive
 
     # initializes your PDU with callable characteristics
     @abstractmethod
