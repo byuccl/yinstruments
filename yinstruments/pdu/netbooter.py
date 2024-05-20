@@ -140,18 +140,20 @@ class Netbooter(PDU):
         return self.request_response("pshow")
 
     def get_port_status(self):
-        """ Returns an boolean array of port status (True=ON, False = Off)"""
+        """ Returns a dictionary between the port number and a boolean (True=ON, False = Off) """
         #    1 |     ZCU102 |   ON |  
-        status_re = "\s+\d+\s+\|.+\|\s+(\w+).+"
+        status_re = "\s+(\d+)\s+\|.+\|\s+(\w+).+"
         status_str = self.get_status()
-        status = []
+        status = {}
         for i in status_str:
             match = re.match(status_re,i)
             if match:
-                if match.group(1) == "ON":
-                    status.append(True)
+                port_num = int(match.group(1))
+                if match.group(2) == "ON":
+                    value = True
                 else:
-                    status.append(False)
+                    value = False
+                status[port_num] = value
         return status
 
     def is_on(self, port_num):
