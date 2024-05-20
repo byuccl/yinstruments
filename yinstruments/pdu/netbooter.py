@@ -74,6 +74,7 @@ class Netbooter(PDU):
         if self.telnet is None:
             return None
         string = self.telnet.read_some()
+        # Short time needed before next command
         time.sleep(self.sleep_time)
         return string
     
@@ -82,6 +83,7 @@ class Netbooter(PDU):
         if self.telnet is None:
             return
         self.telnet.write(command)
+        # Short time needed before next command
         time.sleep(self.sleep_time)
 
     def encode_command(self, cmd:str):
