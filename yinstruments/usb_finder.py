@@ -37,6 +37,7 @@ def createUSBTTYDevice(dev_path_str):
         
     /devices/pci0000:00/0000:00:14.0/usb1/1-10/1-10.1/1-10.1:1.1/ttyUSB3/tty/ttyUSB3
 
+    see: http://www.linux-usb.org/FAQ.html#i6
     """
 
     p = subprocess.run(
