@@ -144,21 +144,30 @@ class Netbooter(PDU):
         return self.request_response("pshow")
 
     def get_port_status(self):
-        """ Returns a dictionary between the port number and a boolean (True=ON, False = Off) """
-        #    1 |     ZCU102 |   ON |  
-        status_re = "\s+(\d+)\s+\|.+\|\s+(\w+).+"
+        """ Returns a dictionary between the port number (int) and a boolean (True=ON, False = Off) """
         status_str = self.get_status()
         status = {}
-        for i in status_str:
-            match = re.match(status_re,i)
-            if match:
-                port_num = int(match.group(1))
-                if match.group(2) == "ON":
-                    value = True
-                else:
-                    value = False
-                status[port_num] = value
+        for port_status_str in status_str:
+            status_tuple = self._str_to_port_status(port_status_str)
+            if status_tuple is not None:
+                status[status_tuple[0]] = status_tuple[1]
         return status
+
+    def _str_to_port_status(self,status_str):
+        """ Parses a status string and returns the tuple (port:int,status:Boolean) 
+        Returns None if the string doesn't match """
+        # Example String
+        #    1 |     ZCU102 |   ON |  
+        status_re = "\s+(\d+)\s+\|.+\|\s+(\w+).+"
+        match = re.match(status_re,status_str)
+        if match:
+            port_num = int(match.group(1))
+            if match.group(2) == "ON":
+                value = True
+            else:
+                value = False
+            return (port_num, value)
+        return None
 
     def is_on(self, port_num):
         """ Working? """
