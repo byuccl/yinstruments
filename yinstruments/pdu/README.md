@@ -21,8 +21,9 @@ classes have the following callable functions: get_status, reboot, off, and on.
 
         To instance a version of your pdu in a different file, add the following code:
 
-            from yinstruments.yinstruments.pdu.lindy import Lindy
-            from yinstruments.yinstruments.pdu.netbooter import Netbooter
+            from yinstruments.pdu.lindy import Lindy
+            from yinstruments.pdu.netbooter import Netbooter
+
 
         Example of calling an instance of a pdu:
 
