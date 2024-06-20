@@ -12,12 +12,16 @@ class PDUType(Enum):
 class PDU:
     """Generic class for PDU"""
 
-    DEFAULT_TIMEOUT_TIME = 3.0      # 3 seconds
-    DEFAULT_COMMAND_DELAY = 1.0     # This is the original delay that may be needed by the Lindy. It is probably excessive
+    DEFAULT_TIMEOUT_TIME = 3.0  # 3 seconds
+    DEFAULT_COMMAND_DELAY = (
+        1.0  # This is the original delay that may be needed by the Lindy. It is probably excessive
+    )
 
     # initializes your PDU with callable characteristics
     @abstractmethod
-    def __init__(self, ip_address, port, timeout=DEFAULT_TIMEOUT_TIME, command_delay=DEFAULT_COMMAND_DELAY):
+    def __init__(
+        self, ip_address, port, timeout=DEFAULT_TIMEOUT_TIME, command_delay=DEFAULT_COMMAND_DELAY
+    ):
         self.sleep_time = command_delay
         self.timeout = timeout
         self.ip_address = ip_address

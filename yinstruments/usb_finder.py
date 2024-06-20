@@ -4,25 +4,29 @@ import subprocess
 
 import pyudev
 
-class USBTTYDevice():
-    """ Represents a USB TTY device as captured by the 'udevadm' Linux command. """
+
+class USBTTYDevice:
+    """Represents a USB TTY device as captured by the 'udevadm' Linux command."""
 
     def __init__(self, roothub_num, phys_port, configuration, interface, device_path):
-        """ Initializes the object based on the 'udevadm' path """
+        """Initializes the object based on the 'udevadm' path"""
         self.roothub_num = roothub_num
         self.phys_port = phys_port
         self.configuration = configuration
         self.interface = interface
         self.device_path = device_path
 
+
 class USBFindError(Exception):
-    """ Empty exception for USB finding """
+    """Empty exception for USB finding"""
+
     pass
 
+
 def createUSBTTYDevice(dev_path_str):
-    """ Creates a USBTTYDevice from the given device string (i.e., /dev/ttyUSB0).
+    """Creates a USBTTYDevice from the given device string (i.e., /dev/ttyUSB0).
     If the device is not a USB tty device then None is returned.
-    
+
     The "udevadm" command is called querying information in the 'udev'
     database ('udev' is the Linux subsystem for managing device events like plugging things in).
     An example of the command that is used is as follows:
@@ -34,7 +38,7 @@ def createUSBTTYDevice(dev_path_str):
     and the -n /dev/ttyUSB0 option specifies the device path to query.
 
     The result of such a command is a string such as the following:
-        
+
     /devices/pci0000:00/0000:00:14.0/usb1/1-10/1-10.1/1-10.1:1.1/ttyUSB3/tty/ttyUSB3
 
     see: http://www.linux-usb.org/FAQ.html#i6
@@ -44,7 +48,9 @@ def createUSBTTYDevice(dev_path_str):
         ["udevadm", "info", "-q", "path", "-n", dev_path_str], stdout=subprocess.PIPE
     )
 
-    USB_DEVICE_REGEX = f"\/devices\/.*?\/usb(\d+)\/.+\/(\d+\-\d+\.\d+)\:(\d+)\.(\d+).+\/(tty\w+\d+)$"
+    USB_DEVICE_REGEX = (
+        f"\/devices\/.*?\/usb(\d+)\/.+\/(\d+\-\d+\.\d+)\:(\d+)\.(\d+).+\/(tty\w+\d+)$"
+    )
     USB_ROOTHUB_NUM_RE_GROUP = 1
     PHYS_PORT_RE_GROUP = 2
     CONFIGURATION_RE_GROUP = 3
@@ -59,7 +65,10 @@ def createUSBTTYDevice(dev_path_str):
     match_configuration = int(m.group(CONFIGURATION_RE_GROUP))
     match_interface = int(m.group(INTERFACE_RE_GROUP))
     match_device_path = m.group(DEVICE_PATH_RE_GROUP)
-    return USBTTYDevice(match_rootnubnum, match_phys_port, match_configuration, match_interface, match_device_path)
+    return USBTTYDevice(
+        match_rootnubnum, match_phys_port, match_configuration, match_interface, match_device_path
+    )
+
 
 def find_usbtty_devices():
     usbtty_devices = {}  # dictionary between device file and usb device
@@ -68,13 +77,14 @@ def find_usbtty_devices():
         device_str = str(f)
         # Only query those that match a 'tty' device and have at least two letters after tty
         # (i.e., USB or ACM). Ignore the tty\d+ and \ttyS\d+ entries
-        if re.match("/dev/tty[a-zA-Z][a-zA-Z]+\d+",device_str):
+        if re.match("/dev/tty[a-zA-Z][a-zA-Z]+\d+", device_str):
             device = createUSBTTYDevice(device_str)
             if device is not None:
                 usbtty_devices[device_str] = device
     return usbtty_devices
 
-def find_dev_file_tty(usb_phys_port, interface = 0):
+
+def find_dev_file_tty(usb_phys_port, interface=0):
     devices = find_usbtty_devices()
     for dev_file_str in devices:
         device = devices[dev_file_str]
@@ -82,6 +92,7 @@ def find_dev_file_tty(usb_phys_port, interface = 0):
             return dev_file_str
     # No match found. Return None
     return None
+
 
 def find_dev_file_ttyUSB(usb_phys_port, interface):
     """This will find the correct /dev/ttyUSBX file for a given physical USB port and interface.

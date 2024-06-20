@@ -10,10 +10,10 @@ from .pdu import PDU
 
 
 class Netbooter(PDU):
-    """ This is the Netbooter class
+    """This is the Netbooter class
 
     List of commands available to the Netbooter
-    
+
     >help
     ip          Sets static IP addr. "ip xx.xx.xx.xx"
     gw          Sets Static gateway IP.
@@ -41,17 +41,23 @@ class Netbooter(PDU):
     time        Displays current time.
     ver         Displays hardware and software versions.
     web v       Turns Web access ON/OFF. "1"=ON. "0"-OFF.
-    
+
     """
 
     DEFAULT_NETBOOTER_PORT = 23
-    DEFAULT_TIMEOUT_TIME = 3.0          # 3 seconds
-    DEFAULT_NETBOOTER_DELAY = 0.05      # 50 ms
-    
-    def __init__(self, ip_address, port=DEFAULT_NETBOOTER_PORT, timeout=PDU.DEFAULT_TIMEOUT_TIME, command_delay=DEFAULT_NETBOOTER_DELAY):
-        """ Netbooter constructor.
+    DEFAULT_TIMEOUT_TIME = 3.0  # 3 seconds
+    DEFAULT_NETBOOTER_DELAY = 0.05  # 50 ms
+
+    def __init__(
+        self,
+        ip_address,
+        port=DEFAULT_NETBOOTER_PORT,
+        timeout=PDU.DEFAULT_TIMEOUT_TIME,
+        command_delay=DEFAULT_NETBOOTER_DELAY,
+    ):
+        """Netbooter constructor.
         ip_address: IP address of the netbooter
-        port: the TCP port used for the telnet session. """
+        port: the TCP port used for the telnet session."""
         super().__init__(ip_address, port, timeout, command_delay)
         self.telnet = None
 
@@ -59,50 +65,50 @@ class Netbooter(PDU):
         return f"{self.ip_address}:{self.port}"
 
     def create_telnet_session(self):
-        """ Creates a telnet session to the Netbooter. """
+        """Creates a telnet session to the Netbooter."""
         self.telnet = telnetlib.Telnet(self.ip_address, self.port, timeout=self.timeout)
         return self.telnet
 
     def close_telnet_session(self):
-        """ Close Netbooter telnet session. """
+        """Close Netbooter telnet session."""
         if self.telnet is not None:
             self.telnet.close()
 
     def read_some(self):
-        """ Read from the Netbooter. """
+        """Read from the Netbooter."""
         if self.telnet is None:
             return None
         string = self.telnet.read_some()
         # Short time needed before next command
         time.sleep(self.sleep_time)
         return string
-    
-    def write(self,command):
-        """ Write data to the Netbooter. """
+
+    def write(self, command):
+        """Write data to the Netbooter."""
         if self.telnet is None:
             return
         self.telnet.write(command)
         # Short time needed before next command
         time.sleep(self.sleep_time)
 
-    def encode_command(self, cmd:str):
+    def encode_command(self, cmd: str):
         return cmd.encode("ascii") + b"\r\n\r\n"
 
-    def encode_request(self, req:str):
+    def encode_request(self, req: str):
         return req.encode("ascii") + b"\r\n"
 
-    def send_command(self, cmd:str):
-        """ Send an aribitray command to the Netbooter. """
+    def send_command(self, cmd: str):
+        """Send an aribitray command to the Netbooter."""
         self.create_telnet_session()
         string = self.read_some()
         string = self.encode_command(cmd)
         self.write(string)
         self.close_telnet_session()
-        
-    def request_response(self, req:str):
-        """ Send a request for a response from the Netbooter. Returns an array of strings.
-        The initial and ending prompt are removed. In addition, the response is split into 
-        strings based on line termination. """
+
+    def request_response(self, req: str):
+        """Send a request for a response from the Netbooter. Returns an array of strings.
+        The initial and ending prompt are removed. In addition, the response is split into
+        strings based on line termination."""
         self.create_telnet_session()
         string = self.read_some()
         string = self.encode_request(req)
@@ -118,7 +124,7 @@ class Netbooter(PDU):
         # Remove the initial prompt "\r\n>" from string
         string = string[3:]
         # Remove the command and the following "\n\r" from teh string
-        chars_to_remove = len(req)+2
+        chars_to_remove = len(req) + 2
         string = string[chars_to_remove:]
         # Remove the ending prompt "\r\n>" from string
         string = string[:-3]
@@ -127,23 +133,23 @@ class Netbooter(PDU):
         return strings
 
     def reboot(self, port_num):
-        """ Issue 'reboot' command to a Netbooter port. """
+        """Issue 'reboot' command to a Netbooter port."""
         self.send_command("rb " + str(port_num))
 
     def on(self, port_num):
-        """ Turn on a Netbooter port. """
+        """Turn on a Netbooter port."""
         self.send_command("pset " + str(port_num) + " 1")
 
     def off(self, port_num):
-        """ Turn off a Netbooter port. """
+        """Turn off a Netbooter port."""
         self.send_command("pset " + str(port_num) + " 0")
 
     def get_status(self):
-        """ Executes the status command and resturns the string output. """
+        """Executes the status command and resturns the string output."""
         return self.request_response("pshow")
 
     def get_port_status(self):
-        """ Returns a dictionary between the port number (int) and a boolean (True=ON, False = Off) """
+        """Returns a dictionary between the port number (int) and a boolean (True=ON, False = Off)"""
         status_str = self.get_status()
         status = {}
         for port_status_str in status_str:
@@ -152,13 +158,13 @@ class Netbooter(PDU):
                 status[status_tuple[0]] = status_tuple[1]
         return status
 
-    def _str_to_port_status(self,status_str):
-        """ Parses a status string and returns the tuple (port:int,status:Boolean) 
-        Returns None if the string doesn't match """
+    def _str_to_port_status(self, status_str):
+        """Parses a status string and returns the tuple (port:int,status:Boolean)
+        Returns None if the string doesn't match"""
         # Example String
-        #    1 |     ZCU102 |   ON |  
-        status_re = "\s+(\d+)\s+\|.+\|\s+(\w+).+"
-        match = re.match(status_re,status_str)
+        #    1 |     ZCU102 |   ON |
+        status_re = r"\s+(\d+)\s+\|.+\|\s+(\w+).+"
+        match = re.match(status_re, status_str)
         if match:
             port_num = int(match.group(1))
             if match.group(2) == "ON":
@@ -169,7 +175,7 @@ class Netbooter(PDU):
         return None
 
     def is_on(self, port_num):
-        """ Working? """
+        """Working?"""
         text = self.get_status()
         lines = text.splitlines()
 
