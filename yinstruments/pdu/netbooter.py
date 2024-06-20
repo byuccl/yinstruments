@@ -1,7 +1,6 @@
 """ This file contians the Netbooter class which inherits
 from the PDU class.
 
-See the following [URL](https://static1.squarespace.com/static/54d27fb4e4b024eccdd9e569/t/6259cbade66b71218d8284ed/1650052014555/1094_NPStartup_V14.pdf) for details on the API.
 """
 
 import telnetlib
@@ -46,8 +45,8 @@ class Netbooter(PDU):
     """
 
     DEFAULT_NETBOOTER_PORT = 23
-    DEFAULT_TIMEOUT_TIME = 3.0      # 3 seconds
-    DEFAULT_NETBOOTER_DELAY = 0.05    # 50 ms
+    DEFAULT_TIMEOUT_TIME = 3.0          # 3 seconds
+    DEFAULT_NETBOOTER_DELAY = 0.05      # 50 ms
     
     def __init__(self, ip_address, port=DEFAULT_NETBOOTER_PORT, timeout=PDU.DEFAULT_TIMEOUT_TIME, command_delay=DEFAULT_NETBOOTER_DELAY):
         """ Netbooter constructor.
