@@ -24,6 +24,7 @@ def main():
         choices=("on", "off", "is_on", "reboot", "get_status"),
     )
     arguments.add_argument("port_num", type=str, help="Port number to perform action on")
+    arguments.add_argument("--delay", type=float, help="Delay time for command")
     args = arguments.parse_args()
 
     # These four variables are your arguments you will enter into the command line
@@ -35,7 +36,10 @@ def main():
 
     if dev_type.lower() == "netbooter":
         port = 23
-        pdu = Netbooter(ip_address, port)
+        if args.delay:
+            pdu = Netbooter(ip_address, port, command_delay=args.delay)
+        else:
+            pdu = Netbooter(ip_address, port)
     elif dev_type == "lindy":
         port = 80
         pdu = Lindy(ip_address, port)
