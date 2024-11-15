@@ -46,7 +46,7 @@ class Netbooter(PDU):
 
     DEFAULT_NETBOOTER_PORT = 23
     DEFAULT_TIMEOUT_TIME = 3.0  # 3 seconds
-    DEFAULT_NETBOOTER_DELAY = 0.05  # 50 ms
+    DEFAULT_NETBOOTER_DELAY = 0.5  # 500 ms
 
     def __init__(
         self,
