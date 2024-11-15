@@ -97,6 +97,22 @@ def power_on(usb_phys_port, print_output=False):
         return True
 
 
+def cli():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "usb_physical_port", help="The physical port of the USB (1-1.1 for example)"
+    )
+    parser.add_argument("action", choices=["on", "off"])
+
+    args = parser.parse_args()
+
+    p = USBPortPower(args.usb_physical_port)
+    if args.action == "on":
+        p.on()
+    else:
+        p.off()
+
+
 def main():
     #  Power cycle UART USB port
     print("Power cycling UART")
