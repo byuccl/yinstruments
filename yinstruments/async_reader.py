@@ -110,7 +110,7 @@ class AsyncReaderUART(AsyncReader):
 
     #     raise SerialNoFullLine
 
-    def get_data(self):
+    def _get_data(self):
         return self.serial.read_until()
 
 
