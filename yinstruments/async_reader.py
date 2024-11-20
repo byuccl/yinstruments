@@ -111,7 +111,8 @@ class AsyncReaderUART(AsyncReader):
     #     raise SerialNoFullLine
 
     def _get_data(self):
-        return self.serial.read_until()
+        t = self.serial.read_until()
+        return t.decode("utf-8")
 
 
 class AsyncReaderSocket(AsyncReader):
