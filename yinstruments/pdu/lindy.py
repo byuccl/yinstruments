@@ -2,6 +2,7 @@
 PDU class"""
 
 import subprocess
+from time import sleep
 from .pdu import PDU
 
 # standard OID for the functions we will be doing
@@ -46,6 +47,7 @@ class Lindy(PDU):
 
         # execute the command
         subprocess.check_output(command)
+        sleep(self.sleep_time)
 
         # print that the port_num is now on
         # print("On:", port_num)
@@ -79,6 +81,7 @@ class Lindy(PDU):
 
         # execute the command
         subprocess.check_output(command)
+        sleep(self.sleep_time)
 
     def reboot(self, port_num):
         self.off(port_num)
