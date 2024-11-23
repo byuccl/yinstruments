@@ -8,15 +8,17 @@ from .pdu import PDU
 # standard OID for the functions we will be doing
 OID = "iso.3.6.1.4.1.17420.1.2.9.1.13.0"
 
+DEFAULT_COMMAND_DELAY = 5.0  # This is delay needed by the lindy.
+
 
 class Lindy(PDU):
     """This is the Lindy class"""
 
-    def __init__(self, ip_address, port, timeout=3.0):
-        super().__init__(ip_address, port)
+    def __init__(self, ip_address, timeout=3.0):
+        super().__init__(ip_address, command_delay=DEFAULT_COMMAND_DELAY)
 
     def __str__(self):
-        return f"{self.ip_address}:{self.port}"
+        return f"{self.ip_address}"
 
     def on(self, port_num):
         if int(port_num) > 8:  # Since we are working with the LindyIPowerClassic8,

@@ -58,8 +58,9 @@ class Netbooter(PDU):
         """Netbooter constructor.
         ip_address: IP address of the netbooter
         port: the TCP port used for the telnet session."""
-        super().__init__(ip_address, port, timeout, command_delay)
+        super().__init__(ip_address, timeout, command_delay)
         self.telnet = None
+        self.port = port
 
     def __str__(self):
         return f"{self.ip_address}:{self.port}"
