@@ -51,6 +51,10 @@ class PowerSupply:
             return float(self.instr.ask("MEAS:CURR? (@" + str(channel_idx) + ")"))
         return 0
 
+    def set_channel_current(self, channel_idx, current):
+        if self.validate_channel(channel_idx) and self.validate_voltage(current):
+            self.instr.write("CURR " + str(current) + ", (@" + str(channel_idx) + ")")
+
     def validate_channel(self, channel_idx):
         if not (1 <= channel_idx <= self.num_channels):
             print("Invalid channel. Must be between 1 and", self.num_channels)

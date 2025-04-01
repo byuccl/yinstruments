@@ -5,6 +5,7 @@ env:
 	$(IN_ENV) pip install packaging
 
 check_version_increase:
+	$(IN_ENV) pip install setuptools
 	$(IN_ENV) pip uninstall -y yinstruments
 	$(IN_ENV) pip install yinstruments
 	$(IN_ENV) echo `python print_version.py` > pypi_version.txt
