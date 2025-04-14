@@ -14,7 +14,7 @@ class PowerSupply:
             self.num_channels = 3
         elif model_name == "E36231A":
             self.num_channels = 1
-        elif model_name == "N6705B":
+        elif model_name in ("N6705B", "N6705C"):
             self.num_channels = 4
         else:
             raise NotImplementedError("Unknown power supply model", model_name)
