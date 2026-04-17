@@ -12,10 +12,13 @@ class PowerSupply:
         model_name = self.get_power_supply_model_name()
         if model_name == "E36313A":
             self.num_channels = 3
+            self.num_digital_io_channels = 3
         elif model_name == "E36231A":
             self.num_channels = 1
+            self.num_digital_io_channels = 3
         elif model_name in ("N6705B", "N6705C"):
             self.num_channels = 4
+            self.num_digital_io_channels = 0  # Haven't checked if these have digital I/O.
         else:
             raise NotImplementedError("Unknown power supply model", model_name)
 
@@ -66,6 +69,43 @@ class PowerSupply:
             print("Invalid voltage. Must be between", self.volt_min, "and", self.volt_max)
             return False
         return True
+
+    # --- Digital I/O (E36313A and E36231A only) ---
+
+    def validate_dio_pin(self, pin: int) -> bool:
+        if not (1 <= pin <= self.num_digital_io_channels):
+            print("Invalid DIO pin. Must be between 1 and", self.num_digital_io_channels)
+            return False
+        return True
+
+    def configure_dio_input(self, pin: int) -> None:
+        """Configure a digital I/O pin as an input with positive polarity."""
+        if self.validate_dio_pin(pin):
+            self.instr.write("DIG:PIN" + str(pin) + ":FUNC DINP")
+            self.instr.write("DIG:PIN" + str(pin) + ":POL POS")
+
+    def configure_dio_output(self, pin: int) -> None:
+        """Configure a digital I/O pin as an output with positive polarity."""
+        if self.validate_dio_pin(pin):
+            self.instr.write("DIG:PIN" + str(pin) + ":FUNC DIO")
+            self.instr.write("DIG:PIN" + str(pin) + ":POL POS")
+
+    def read_dio_pin(self, pin) -> bool:
+        """Read the state of a digital input pin. Returns True or False."""
+        if self.validate_dio_pin(pin):
+            data = int(self.instr.ask("DIG:INP:DATA?"))
+            return bool((data >> (pin - 1)) & 1)
+        return False
+
+    def write_dio_pin(self, pin: int, value: bool) -> None:
+        """Set the state of a digital output pin to 1 or 0."""
+        if self.validate_dio_pin(pin):
+            current = int(self.instr.ask("DIG:OUTP:DATA?"))
+            if value:
+                current |= 1 << (pin - 1)
+            else:
+                current &= ~(1 << (pin - 1))
+            self.instr.write("DIG:OUTP:DATA " + str(current))
 
     def __del__(self):
         """This function calls the close function, which closes communication and connection with the power supply."""
