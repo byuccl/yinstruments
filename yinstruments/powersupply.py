@@ -2,6 +2,9 @@ import vxi11
 
 
 class PowerSupply:
+    SLEW_MAX = "MAX"
+    SLEW_MIN = "MIN"
+
     # GET_MEAS = "MEAS:{measurement}? (@{channel})"
     # MAX_TRIES = 10
 
@@ -9,18 +12,21 @@ class PowerSupply:
         self.instr = vxi11.Instrument(ip_address)
         self.instr.open()
 
-        model_name = self.get_power_supply_model_name()
-        if model_name == "E36313A":
+        self.model_name = self.get_power_supply_model_name()
+        if self.model_name == "E36313A":
             self.num_channels = 3
             self.num_digital_io_channels = 3
-        elif model_name == "E36231A":
+            self.supports_slew = False
+        elif self.model_name == "E36231A":
             self.num_channels = 1
             self.num_digital_io_channels = 3
-        elif model_name in ("N6705B", "N6705C"):
+            self.supports_slew = True
+        elif self.model_name in ("N6705B", "N6705C"):
             self.num_channels = 4
             self.num_digital_io_channels = 0  # Haven't checked if these have digital I/O.
+            self.supports_slew = True
         else:
-            raise NotImplementedError("Unknown power supply model", model_name)
+            raise NotImplementedError("Unknown power supply model", self.model_name)
 
         self.volt_min = 0
         self.volt_max = 20.0
@@ -70,6 +76,33 @@ class PowerSupply:
             return False
         return True
 
+    def validate_slew_rate(self, slew_rate) -> bool:
+        """Validate slew_rate. Accepts 'MAX', 'MIN', 'INF' strings or positive numeric values (0 < slew_rate <= 100,000)."""
+        if isinstance(slew_rate, str):
+            if slew_rate.upper() in ("MAX", "MIN", "INF"):
+                return True
+            try:
+                slew_rate = float(slew_rate)
+            except ValueError:
+                print(f"Invalid slew rate string: {slew_rate}")
+                return False
+
+        if isinstance(slew_rate, (int, float)):
+            if slew_rate < 0.002:
+                print(
+                    f"Slew rate {slew_rate} V/s is below minimum value (0.002). Use PowerSupply.SLEW_MIN for slowest rate."
+                )
+                return False
+            if slew_rate > 100000:
+                print(
+                    f"Slew rate {slew_rate} V/s exceeds maximum numerical limit (100,000). Use PowerSupply.SLEW_MAX for fastest rate."
+                )
+                return False
+            return True
+
+        print(f"Invalid slew rate type: {type(slew_rate)}")
+        return False
+
     # --- Digital I/O (E36313A and E36231A only) ---
 
     def validate_dio_pin(self, pin: int) -> bool:
@@ -113,6 +146,97 @@ class PowerSupply:
 
     def get_power_supply_model_name(self):
         return self.instr.ask("*IDN?").split(",")[1]
+
+    # --- Slew Rate Control ---
+
+    def set_channel_voltage_slew_rate(self, channel_idx, slew_rate):
+        """Set the voltage slew rate in V/s for both rising and falling transitions."""
+        if not self.supports_slew:
+            raise NotImplementedError(
+                f"Voltage slew rate control is not supported on model {self.model_name}"
+            )
+        if self.validate_channel(channel_idx) and self.validate_slew_rate(slew_rate):
+            if self.model_name == "E36231A":
+                self.instr.write(f"VOLT:SLEW:RIS {slew_rate}, (@{channel_idx})")
+                self.instr.write(f"VOLT:SLEW:FALL {slew_rate}, (@{channel_idx})")
+            elif self.model_name in ("N6705B", "N6705C"):
+                self.instr.write(f"VOLT:SLEW {slew_rate}, (@{channel_idx})")
+
+    def set_channel_voltage_slew_rising(self, channel_idx, slew_rate):
+        """Set rising voltage slew rate in V/s."""
+        if not self.supports_slew:
+            raise NotImplementedError(
+                f"Voltage slew rate control is not supported on model {self.model_name}"
+            )
+        if self.validate_channel(channel_idx) and self.validate_slew_rate(slew_rate):
+            if self.model_name == "E36231A":
+                self.instr.write(f"VOLT:SLEW:RIS {slew_rate}, (@{channel_idx})")
+            elif self.model_name in ("N6705B", "N6705C"):
+                self.instr.write(f"VOLT:SLEW {slew_rate}, (@{channel_idx})")
+
+    def set_channel_voltage_slew_falling(self, channel_idx, slew_rate):
+        """Set falling voltage slew rate in V/s."""
+        if not self.supports_slew:
+            raise NotImplementedError(
+                f"Voltage slew rate control is not supported on model {self.model_name}"
+            )
+        if self.validate_channel(channel_idx) and self.validate_slew_rate(slew_rate):
+            if self.model_name == "E36231A":
+                self.instr.write(f"VOLT:SLEW:FALL {slew_rate}, (@{channel_idx})")
+            elif self.model_name in ("N6705B", "N6705C"):
+                self.instr.write(f"VOLT:SLEW {slew_rate}, (@{channel_idx})")
+
+    def get_channel_voltage_slew_rising(self, channel_idx) -> float:
+        """Get rising voltage slew rate in V/s."""
+        if not self.supports_slew:
+            raise NotImplementedError(
+                f"Voltage slew rate control is not supported on model {self.model_name}"
+            )
+        if self.validate_channel(channel_idx):
+            if self.model_name == "E36231A":
+                return float(self.instr.ask(f"VOLT:SLEW:RIS? (@{channel_idx})"))
+            elif self.model_name in ("N6705B", "N6705C"):
+                return float(self.instr.ask(f"VOLT:SLEW? (@{channel_idx})"))
+        return 0.0
+
+    def get_channel_voltage_slew_falling(self, channel_idx) -> float:
+        """Get falling voltage slew rate in V/s."""
+        if not self.supports_slew:
+            raise NotImplementedError(
+                f"Voltage slew rate control is not supported on model {self.model_name}"
+            )
+        if self.validate_channel(channel_idx):
+            if self.model_name == "E36231A":
+                return float(self.instr.ask(f"VOLT:SLEW:FALL? (@{channel_idx})"))
+            elif self.model_name in ("N6705B", "N6705C"):
+                return float(self.instr.ask(f"VOLT:SLEW? (@{channel_idx})"))
+        return 0.0
+
+    def get_channel_voltage_slew_rate(self, channel_idx) -> tuple[float, float]:
+        """Get voltage slew rate in V/s as a tuple of (rising, falling)."""
+        return (
+            self.get_channel_voltage_slew_rising(channel_idx),
+            self.get_channel_voltage_slew_falling(channel_idx),
+        )
+
+    def set_channel_current_slew_rate(self, channel_idx, slew_rate):
+        """Set current slew rate in A/s (N6705B/C only)."""
+        if self.model_name not in ("N6705B", "N6705C"):
+            raise NotImplementedError(
+                f"Current slew rate control is not supported on model {self.model_name}"
+            )
+        if self.validate_channel(channel_idx) and self.validate_slew_rate(slew_rate):
+            self.instr.write(f"CURR:SLEW {slew_rate}, (@{channel_idx})")
+
+    def get_channel_current_slew_rate(self, channel_idx) -> float:
+        """Get current slew rate in A/s (N6705B/C only)."""
+        if self.model_name not in ("N6705B", "N6705C"):
+            raise NotImplementedError(
+                f"Current slew rate control is not supported on model {self.model_name}"
+            )
+        if self.validate_channel(channel_idx):
+            return float(self.instr.ask(f"CURR:SLEW? (@{channel_idx})"))
+        return 0.0
 
     # def get_measurement_float(
     #     self,
