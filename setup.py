@@ -8,7 +8,14 @@ setup(
     author="Jeff Goeders",
     author_email="jeff.goeders@gmail.com",
     url="https://github.com/byuccl/yinstruments",
-    install_requires=["pyudev", "pyserial", "pysnmp", "secbench-vxi11==0.10.1", "pyhubctl"],
+    install_requires=[
+        "pyudev",
+        "pyserial",
+        "pysnmp",
+        "secbench-vxi11==0.10.1",
+        "pyhubctl",
+        "standard-telnetlib; python_version >= '3.13'",
+    ],
     entry_points={
         "console_scripts": [
             "pdu = yinstruments.pdu.cli:main",
