@@ -111,7 +111,9 @@ class AsyncReaderUART(AsyncReader):
     #     raise SerialNoFullLine
 
     def _get_data(self):
-        t = self.serial.read_until()
+        # read_until is a lot slower & has issues with polarfire's ddr training progress bar... switch for normal read. 
+        # t = self.serial.read_until()
+        t = self.serial.read(4096)
         return t.decode("utf-8")
 
 
