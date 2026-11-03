@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import codecs
 
 import serial
 
@@ -79,6 +80,11 @@ class AsyncReaderUART(AsyncReader):
     def __init__(self, serial):
         super().__init__()
         self.serial = serial
+        # Reads must never block (the caller polls get_line()), regardless of how the port was opened.
+        self.serial.timeout = 0
+        # Incremental decoder handles multi-byte characters split across reads; invalid bytes
+        # (e.g. power-up noise) are replaced rather than raising and discarding the whole chunk.
+        self._decoder = codecs.getincrementaldecoder("utf-8")(errors="replace")
 
     # def get_line(serial):
     #     """
@@ -114,7 +120,7 @@ class AsyncReaderUART(AsyncReader):
         # read_until is a lot slower & has issues with polarfire's ddr training progress bar... switch for normal read.
         # t = self.serial.read_until()
         t = self.serial.read(4096)
-        return t.decode("utf-8")
+        return self._decoder.decode(t)
 
 
 class AsyncReaderSocket(AsyncReader):
