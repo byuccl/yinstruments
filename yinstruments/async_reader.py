@@ -21,7 +21,7 @@ class AsyncReader:
 
         # If there is already a line in the list from a previous read, then return it.
         if self.lines:
-            return self.lines.pop(0)
+            return self.lines.pop(0).strip()
 
         # Otherwise get some new data and split it into lines, and return the first line.
         try:
